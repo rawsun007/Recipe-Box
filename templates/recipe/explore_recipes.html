@@ -1,0 +1,649 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Recipes</title>
+    <style>
+      .search1-button {
+        background-color: #4caf50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 25px; /* Makes the button cylindrical */
+      }
+      body {
+        font-family: "Oxygen", sans-serif;
+        color: #050505;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      .main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      /* Card List */
+      .cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px; /* Increases space between cards */
+        list-style: none;
+        margin: 0 auto; /* Center align the cards */
+        padding: 0;
+        justify-content: center; /* Centers cards horizontally */
+      }
+      
+      .cards_item {
+        display: flex;
+        flex: 1 1 calc(33.3333% - 30px); /* Makes cards larger and keeps a 30px gap */
+        box-sizing: border-box;
+        max-width: 400px; /* Ensures cards have a maximum width */
+      }
+      
+      @media (max-width: 768px) {
+        .cards_item {
+          flex: 1 1 calc(50% - 20px); /* Adjust for smaller screens */
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .cards_item {
+          flex: 1 1 100%; /* Full-width for mobile */
+        }
+      }
+      
+      .card {
+        background-color: #fff; /* Card background color */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow effect */
+        overflow: hidden;
+        margin: 10px auto; /* Adds vertical spacing between cards */
+        transition: transform 0.2s ease, box-shadow 0.2s ease; /* Add hover effects */
+      }
+      
+      .card:hover {
+        transform: scale(1.05); /* Slightly enlarge on hover */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+      }
+      
+      .card_image {
+        position: relative;
+        width: 100%;
+        height: 250px; /* Make images bigger */
+        overflow: hidden;
+        text-align: center;
+      }
+      
+      .card_image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Makes the image fill the card proportionally */
+      }
+      
+      .card_title {
+        font-size: 24px; /* Larger title text */
+        font-weight: bold;
+        margin: 16px 0;
+        text-align: center;
+      }
+      
+      .card_text  p{
+        text-align: left; 
+        padding: 10px 15px ; 
+        font-size: 16px !important; 
+        line-height: 0.6 !important;
+        color: #333 !important;
+
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 16px 16px;
+      }
+      
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      .delete-btn {
+        background-color: #dc3545;
+        color: white;
+      }
+      
+      .btn-success {
+        background-color: #28a745;
+        color: white;
+      }
+      
+      /* Center the pagination container and add spacing from the card */
+      .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 30px; /* Add spacing between pagination and content */
+        gap: 5px; /* Minimal spacing between elements */
+      }
+      
+      /* Style each pagination button */
+      .pagination-button {
+        background-color: transparent; /* Remove background color */
+        color: #333; /* Neutral text color */
+        border: 1px solid #ddd; /* Subtle border */
+        padding: 8px 12px; /* Comfortable padding */
+        border-radius: 5px; /* Rounded corners */
+        font-size: 14px; /* Adjust font size */
+        cursor: pointer;
+        text-decoration: none;
+        transition: border-color 0.3s, color 0.3s; /* Smooth transition */
+      }
+      
+      /* Hover effect for pagination buttons */
+      .pagination-button:hover {
+        border-color: #007bff; /* Change border to blue on hover */
+        color: #007bff; /* Change text color to blue */
+      }
+      
+      /* Disabled buttons (e.g., when no previous or next page) */
+      .pagination-button:disabled {
+        color: #ccc; /* Greyed out text */
+        border-color: #ddd; /* Light grey border */
+        cursor: not-allowed; /* Indicate no interaction */
+      }
+      
+      /* Active or current page styling */
+      .page-info {
+        font-size: 16px; /* Larger text for emphasis */
+        font-weight: bold;
+        color: #333; /* Neutral text color */
+        padding: 5px 10px; /* Add padding for spacing */
+        border: 1px solid #ddd; /* Subtle border */
+        border-radius: 5px; /* Rounded corners */
+        background-color: #f8f9fa; /* Light background for contrast */
+      }
+      
+      /* Optional: Add focus styles for better accessibility */
+      .pagination-button:focus,
+      .page-info:focus {
+        outline: 2px solid #007bff;
+        outline-offset: 2px;
+      }
+      
+
+          .card {
+          background-color: white;
+          border-radius: 0.25rem;
+          box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          width: 100%;
+          height: 100%; /* Ensure card takes the full height available */
+      }
+
+      .card_content {
+          flex-grow: 1; /* Allow the content to grow and take available space */
+          padding: 16px 12px 32px 24px;
+          margin: 16px 8px 8px 0;
+          max-height: 290px;
+          overflow-y: auto;
+      }
+
+      .button-container {
+          display: flex;
+          justify-content: space-between; /* Align buttons to the sides */
+          padding: 10px; /* Add some padding */
+          margin-top: auto; /* Pushes the button container to the bottom */
+      }
+
+      .btn {
+          padding: 10px 20px;
+          font-size: 1em;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          flex: 1; /* Ensure buttons have equal width */
+          margin: 0 5px; /* Add margin between buttons */
+          text-align: center; /* Center the text within the buttons */
+      }
+
+      .delete-btn {
+          background-color: #e74c3c; /* Red color */
+          color: white;
+      }
+
+      .update-btn {
+          background-color: #2ecc71; /* Green color */
+          color: white;
+      }
+
+      /* Optional: Add hover effect */
+      .btn:hover {
+          opacity: 0.9;
+      }
+
+            /* Preloader Styles */
+               .preloader-overlay {
+                 position: fixed;
+                 top: 0;
+                 left: 0;
+                 width: 100%;
+                 height: 100%;
+                 background-color: rgba(
+                   255,
+                   255,
+                   255,
+                   0.8
+                 ); /* Semi-transparent white background */
+                 z-index: 9999; /* Ensure it's on top */
+                 display: flex;
+                 justify-content: center;
+                 align-items: center;
+               }
+
+               .preloader-container {
+                 text-align: center;
+               }
+
+               .preloader {
+                 background: #000 url(/static/temp/images/lg.gif) center
+                 border: 8px solid #f3f3f3; /* Light grey */
+                 border-top: 8px solid #3498db; /* Blue */
+                 border-radius: 50%;
+                 width: 50px;
+                 height: 50px;
+                 animation: spin 1s linear infinite; /* Spin animation */
+               }
+
+               /* Spin Animation */
+               @keyframes spin {
+                 0% {
+                   transform: rotate(0deg);
+                 }
+                 100% {
+                   transform: rotate(360deg);
+                 }
+               }
+
+               /* Hide content when preloader is active */
+               #content {
+                 display: none;
+               }
+
+    </style>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/bootstrap.css' %}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
+      integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4="
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css"
+      integrity="sha256-UK1EiopXIL+KVhfbFa8xrmAWPeBjMVdvYMYkTAEv/HI="
+      crossorigin="anonymous"
+    />
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Recipes</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/bootstrap.css' %}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
+      integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4="
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css"
+      integrity="sha256-UK1EiopXIL+KVhfbFa8xrmAWPeBjMVdvYMYkTAEv/HI="
+      crossorigin="anonymous"
+    />
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+  </head>
+
+  <body>
+  <!-- Preloader -->
+  <div class="preloader-overlay">
+    <div class="preloader-container">
+      <div class="preloader"></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="content">
+    <div class="hero_area">
+      <header class="header_section">
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href= {% url "home" %}>                <span>Recipe Box</span>
+            </a>
+            <div id="">
+              <div class="User_option">
+                {% if user.is_authenticated %}
+                  <a href="{% url 'user_pro' %}"><i class="fa fa-user" aria-hidden="true"></i><span>  Saved Recipes</span></a>
+                  <a href="{% url 'logout_page' %}"><i class="fa fa-user" aria-hidden="true"></i><span>  Logout</span></a>
+                {% else %}
+                  <a href="{% url 'login_page' %}"><i class="fa fa-user" aria-hidden="true"></i><span>  Login</span></a>
+                {% endif %}
+                <a href="/recipe/home/"><span>Home</span></a>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      <section class="slider_section">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-10 mx-auto">
+              <div class="detail-box">
+                <h1>Discover Modern & Classic Recipes</h1>
+                <p>"A food community where everyone shares their traditional recipes."</p>
+              </div>
+              <div class="find_container">
+                <div class="container">
+                  <div class="row">
+                    <div class="col">
+                      <form method="GET" action="{% url 'explore_recipes' %}">
+                        <div class="form-row">
+                          <div class="form-group col-lg-5">
+                            <input type="text" class="form-control" id="inputHotel" name="Search" placeholder="Search Recipes by Name" />
+                          </div>
+                          <div class="form-group col-lg-3">
+                            <div class="btn-box">
+                              <button type="submit" class="btn">Search</button>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider_container">
+          <div class="item">
+            <div class="img-box">
+              <img src="/static/images/slider-img1.png" alt="" />
+            </div>
+          </div>
+          <div class="item">
+            <div class="img-box">
+              <img src="/static/images/slider-img2.png" alt="" />
+            </div>
+          </div>
+          <div class="item">
+            <div class="img-box">
+              <img src="/static/images/slider-img3.png" alt="" />
+            </div>
+          </div>
+          <div class="item">
+            <div class="img-box">
+              <img src="/static/images/slider-img4.png" alt="" />
+            </div>
+          </div>
+          <div class="item">
+            <div class="img-box">
+              <img src="/static/images/slider-img1.png" alt="" />
+            </div>
+          </div>
+          <div class="item">
+            <div class="img-box">
+              <img src="/static/images/slider-img2.png" alt="" />
+            </div>
+          </div>
+          <div class="item">
+            <div class="img-box">
+              <img src="/static/images/slider-img3.png" alt="" />
+            </div>
+          </div>
+          <div class="item">
+            <div class="img-box">
+              <img src="/static/images/slider-img4.png" alt="" />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="main">
+      {% if search_performed %}
+        <ul class="cards">
+          {% for hit in recipes %}
+          <li class="cards_item">
+            <div class="card">
+              <div class="card_image"><img src="{{ hit.recipe.image }}" alt="Recipe Image" /></div>
+              <h2 class="card_title">{{ hit.recipe.label }}</h2>
+              <div class="card_content">
+                <div class="card_text">
+                  <p>Meal: {{ hit.recipe.mealType|join:", " }}</p>
+                  <p>Cuisine: {{ hit.recipe.cuisineType|join:", " }}</p>
+                  <p>Type: {% if hit.recipe.dishType %}{{ hit.recipe.dishType|join:", " }}{% else %}N/A{% endif %}</p>
+                  <p>Source: {{ hit.recipe.source }}</p>
+                </div>
+              </div>
+             
+              <div class="button-container">
+                <a href="{{ hit.recipe.url }}"><button type="button" class="btn update-btn btn-success">Go to Recipe</button></a>
+                <form method="POST" action="{% url 'user_pro' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="recipe_label" value="{{ hit.recipe.label }}">
+                  <input type="hidden" name="recipe_url" value="{{ hit.recipe.url }}">
+                  <input type="hidden" name="recipe_image" value="{{ hit.recipe.image }}">
+                  <input type="hidden" name="meal_type" value="{{ hit.recipe.mealType|join:", " }}">
+                  <input type="hidden" name="cuisine_type" value="{{ hit.recipe.cuisineType|join:", " }}">
+                  <input type="hidden" name="dish_type" value="{% if hit.recipe.dishType %}{{ hit.recipe.dishType|join:", " }}{% else %}N/A{% endif %}">
+                  <input type="hidden" name="source" value="{{ hit.recipe.source }}">
+                  
+                  {% if user.is_authenticated %}
+                  <button type="submit" class="btn update-btn btn-success">Save</button>
+                  {% else %}
+                  <button type="button" class="btn update-btn btn-success" onclick="promptLogin()">Save</button>
+                  {% endif %}
+                </form>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        
+        <div class="recipe-list">
+          {% if not recipes %}
+            <div style="display: flex; justify-content: center; align-items: center; height: 60vh; text-align: center;">
+              <p style="font-size: 1.5em; color: #666; background-color: #f9f9f9; padding: 20px 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                No recipes found from Global sources.                 
+              </p>
+            </div>
+          {% endif %}
+        </div>
+    
+        {% if recipes %}
+        <div class="pagination-container">
+          {% if start > 0 %}
+          <form method="GET" action="" class="pagination-form">
+            <input type="hidden" name="Search" value="{{ recipe_name }}" />
+            <input type="hidden" name="start" value="{{ prev_start }}" />
+            <button type="submit" class="pagination-button">Previous</button>
+          </form>
+          {% endif %}
+          
+          <span class="page-info">Page {{ current_page }} of {{ total_pages }}</span>
+          
+          {% if has_more %}
+          <form method="GET" action="" class="pagination-form">
+            <input type="hidden" name="Search" value="{{ recipe_name }}" />
+            <input type="hidden" name="start" value="{{ next_start }}" />
+            <button type="submit" class="pagination-button">Next</button>
+          </form>
+          {% endif %}
+        </div>
+        {% endif %}
+      
+      {% else %}
+        <!-- Display a welcome message if no search has been performed -->
+        <div style="display: flex; justify-content: center; align-items: center; height: 60vh; text-align: center;">
+          <p style="font-size: 1.5em; color: #666; background-color: #f9f9f9; padding: 20px 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            Welcome to the Recipe Finder! Start by searching for a recipe using the search bar above.
+          </p>
+        </div>
+      {% endif %}
+    </div>
+    
+
+
+  
+    <section class="about_section layout_padding">
+      <div class="container">
+        <div class="col-md-11 col-lg-10 mx-auto">
+          <div class="heading_container heading_center">
+            <h2>About Us</h2>
+          </div>
+          <div class="box">
+            <div class="col-md-7 mx-auto">
+              <div class="img-box">
+                <img
+                  src="{% static 'images/about-img.jpg' %}"
+                  class="box-img"
+                  alt="About Us"
+                />
+              </div>
+            </div>
+            <div class="detail-box">
+              <p>
+                Welcome to our food recipe website! We are passionate about
+                sharing delicious recipes from around the world. Our mission
+                is to inspire home cooks of all skill levels to explore new
+                flavors and cuisines, and to provide them with easy-to-follow
+                recipes and cooking tips. Whether you're a seasoned chef or
+                just starting out in the kitchen, you'll find something
+                delicious to try on our site.
+              </p>
+              <a href="{% url "explore_recipes" %}">
+                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer_container">
+      <section class="info_section">
+        <div class="container">
+          <div class="social_box">
+            <a
+              href="https://www.instagram.com/roshan_ramani01?igsh=MWlpNWI2MWZmMDB6Yg%3D%3D&utm_source=qr"
+            >
+            <i class="fa fa-instagram" aria-hidden="true"></i>
+          </a>
+        
+            <a
+              href="https://www.linkedin.com/in/roshan-ramani-0510102b2?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+            >
+              <i class="fa fa-linkedin" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer_section">
+        <div class="container">
+          <p>
+            Created By: <strong>Roshan Ramani</strong>
+            <br />
+            <span id="displayYear"></span>
+          </p>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+
+
+    
+  </body>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          setTimeout(function () {
+            document.querySelector(".preloader-overlay").style.display = "none";
+            document.getElementById("content").style.display = "block";
+          }, 1000);
+        });
+      </script>
+                   
+      <script>
+        function promptLogin()     {
+            if (confirm("Please log in to save your recipe. Would you like to log in now?")) {
+                window.location.href = "{% url 'login_page' %}";  // Redirects to login page
+            }
+        }
+    </script>
+  
+      <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+      <script src="{% static 'js/bootstrap.js' %}"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.js"></script>
+      <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"
+        integrity="sha256-Zr3vByTlMGQhvMfgkQ5BtWRSKBGa2QlspKYJnkjZTmo="
+        crossorigin="anonymous"
+      ></script>
+      <script src="{% static 'js/custom.js' %}"></script>
+  </html>
+  

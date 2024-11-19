@@ -1,0 +1,251 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+
+      .toggle-password {
+        cursor: pointer;
+        color: #888;
+        font-size: 1.2em;
+        display: flex;
+        align-items: center;
+    }
+
+    .toggle-password:hover {
+        color: #555;
+    }
+    /* Preloader Styles */
+    .preloader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(
+        255,
+        255,
+        255,
+        0.8
+      ); /* Semi-transparent white background */
+      z-index: 9999; /* Ensure it's on top */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .preloader-container {
+      text-align: center;
+    }
+
+    .preloader {
+      background: #000 url(/static/assets/images/lg.gif) center
+      border: 8px solid #f3f3f3; /* Light grey */
+      border-top: 8px solid #3498db; /* Blue */
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite; /* Spin animation */
+    }
+
+    /* Spin Animation */
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Hide content when preloader is active */
+    #content {
+      display: none;
+    }
+
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+      body {
+        background-image: url("{% static 'assets/images/bg3.jpg' %}");
+        background-size: cover; /* Make sure the image covers the entire background */
+        background-repeat: no-repeat; /* Prevent the image from repeating */
+        background-position: center center; /* Center the image */
+        height: 100vh; /* Ensure the body takes up the full height of the viewport */
+        margin: 0; /* Remove default margin */
+      }
+    </style>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>sign up</title>
+
+    <link rel="stylesheet" href="/static/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/assets/css/fontawsom-all.min.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/static/assets/css/style.css"
+    />
+  </head>
+
+  <body>
+    <div class="preloader-overlay">
+      <div class="preloader-container">
+        <div class="preloader"></div>
+      </div>
+    </div>
+    <div class="container">
+      <div id="content">
+        <div class="container-fluid">
+          <div class="no-pdding login-box">
+            <div class="row no-margin w-100 bklmj">
+              <div class="col-lg-6 col-md-6 log-det">
+                <h2>Signup</h2>
+
+                <div class="row no-margin past">
+                  <p>Dont Have an Account? <span>Create your Account</span></p>
+                </div>
+                <form action="#" class="signin-form" method="post">
+                  {% csrf_token %}
+
+                  <div class="text-box-cont">
+                    <div class="input-group mb-3">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="first name"
+                        name="first_name"
+                        aria-describedby="basic-addon1"
+                        required
+                      />
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="last name"
+                        name="last_name"
+                        aria-describedby="basic-addon1"
+                        required
+                      />
+                    </div>
+                    <div class="input-group mb-3">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Username"
+                        name="username"
+                        aria-label="Username"
+                        aria-describedby="basic-addon1"
+                        required
+                      />
+                    </div>
+                    <div class="input-group mb-3">
+                      <input
+                        type="email"
+                        class="form-control"
+                        placeholder="email"
+                        name="email"
+                        aria-label="email"
+                        aria-describedby="basic-addon1"
+                        required
+                      />
+                    </div>
+                    <div class="input-group mb-3">
+                      <input
+                          type="password"
+                          class="form-control"
+                          id="password"
+                          placeholder="Password"
+                          name="password"
+                          aria-label="Password"
+                          aria-describedby="basic-addon1"
+                          required
+                      />
+                      <span class="input-group-text toggle-password" onclick="togglePasswordVisibility()">
+                          <i class="fas fa-eye" id="toggleIcon"></i>
+                      </span>
+                  </div>
+                  
+                  
+                    {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+
+                    <div class="right-bkij mb-3">
+                      <button class="btn btn-success btn-round">Signup</button>
+                    </div>
+                    <br />
+                    <div class="row linkoi">
+                      <div class="col-sm-5"></div>
+                      <div class="col-sm-7"></div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <div class="col-lg-6 col-md-6 box-de">
+                <div class="ditk-inf">
+                  <h2 class="w-100">Welcome Back</h2>
+                  <p>
+                    Already have an account? <br />
+                    clicking the Login Button
+                  </p>
+                  <a href="/recipe/login_page/">
+                    <button type="button" class="btn btn-outline-light">
+                      Login
+                    </button>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(function () {
+        document.querySelector(".preloader-overlay").style.display = "none";
+        document.getElementById("content").style.display = "block";
+      }, 3000);
+    });
+
+
+    function togglePasswordVisibility() {
+      const passwordField = document.getElementById("password");
+      const toggleIcon = document.getElementById("toggleIcon");
+
+      if (passwordField.type === "password") {
+          passwordField.type = "text";
+          toggleIcon.classList.remove("fa-eye");
+          toggleIcon.classList.add("fa-eye-slash");
+      } else {
+          passwordField.type = "password";
+          toggleIcon.classList.remove("fa-eye-slash");
+          toggleIcon.classList.add("fa-eye");
+      }
+  }
+  </script>
+
+  <script src="/static/assets/js/jquery-3.2.1.min.js"></script>
+  <script src="/static/assets/js/popper.min.js"></script>
+  <script src="/static/assets/js/bootstrap.min.js"></script>
+  <script src="/static/assets/js/script.js"></script>
+</html>

@@ -1,0 +1,638 @@
+
+ 
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Recipes</title>
+    <style>
+      .search1-button {
+        background-color: #4caf50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 25px; /* Makes the button cylindrical */
+      }
+      body {
+        font-family: "Oxygen", sans-serif;
+        color: #050505;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      .main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .pagination-container {
+        margin-top: 30px; /* Add space above the pagination */
+        text-align: center; /* Center align the pagination */
+      }
+      
+      .pagination-container .pagination {
+        display: inline-flex;
+        justify-content: center;
+      }
+      
+
+      @media (max-width: 768px) {
+        .cards_item {
+          flex: 1 1 100%; /* Full width on small screens */
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .cards_item {
+          flex: 1 1 calc(33.3333% - 20px); /* Three cards per row on large screens */
+        }
+      }
+
+
+      .btn-delete {
+        background-color: #dc3545; /* Red color */
+        color: white;
+      }
+
+      .btn-update {
+        background-color: #28a745; /* Green color */
+        color: white;
+      }
+
+      hr {
+        margin: 24px auto;
+        width: 50px;  
+        border-top: 2px solid #c89b3f;
+      }
+
+      /* Card List */
+      .cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px; /* Increases space between cards */
+        list-style: none;
+        margin: 0 auto; /* Center align the cards */
+        padding: 0;
+        justify-content: center; /* Centers cards horizontally */
+      }
+      
+      .cards_item {
+        display: flex;
+        flex: 1 1 calc(33.3333% - 30px); /* Makes cards larger and keeps a 30px gap */
+        box-sizing: border-box;
+        max-width: 400px; /* Ensures cards have a maximum width */
+      }
+      
+      @media (max-width: 768px) {
+        .cards_item {
+          flex: 1 1 calc(50% - 20px); /* Adjust for smaller screens */
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .cards_item {
+          flex: 1 1 100%; /* Full-width for mobile */
+        }
+      }
+      
+      .card {
+        background-color: #fff; /* Card background color */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow effect */
+        overflow: hidden;
+        margin: 10px auto; /* Adds vertical spacing between cards */
+        transition: transform 0.2s ease, box-shadow 0.2s ease; /* Add hover effects */
+      }
+      
+      .card:hover {
+        transform: scale(1.05); /* Slightly enlarge on hover */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+      }
+      
+      .card_image {
+        position: relative;
+        width: 100%;
+        height: 250px; /* Make images bigger */
+        overflow: hidden;
+        text-align: center;
+      }
+      
+      .card_image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Makes the image fill the card proportionally */
+      }
+      
+      .card_title {
+        font-size: 24px; /* Larger title text */
+        font-weight: bold;
+        margin: 16px 0;
+        text-align: center;
+      }
+      
+      .card_text  p{
+        text-align: left; 
+        padding: 10px 15px ; 
+        font-size: 16px !important; 
+        line-height: 0.6 !important;
+        color: #333 !important;
+
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 16px 16px;
+      }
+      
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      .delete-btn {
+        background-color: #dc3545;
+        color: white;
+      }
+      
+      .btn-success {
+        background-color: #28a745;
+        color: white;
+      }
+      
+    
+
+          /* Preloader Styles */
+             .preloader-overlay {
+               position: fixed;
+               top: 0;
+               left: 0;
+               width: 100%;
+               height: 100%;
+               background-color: rgba(
+                 255,
+                 255,
+                 255,
+                 0.8
+               ); /* Semi-transparent white background */
+               z-index: 9999; /* Ensure it's on top */
+               display: flex;
+               justify-content: center;
+               align-items: center;
+             }
+
+             .preloader-container {
+               text-align: center;
+             }
+
+             .preloader {
+               background: #000 url(/static/temp/images/lg.gif) center
+               border: 8px solid #f3f3f3; /* Light grey */
+               border-top: 8px solid #3498db; /* Blue */
+               border-radius: 50%;
+               width: 50px;
+               height: 50px;
+               animation: spin 1s linear infinite; /* Spin animation */
+             }
+
+             /* Spin Animation */
+             @keyframes spin {
+               0% {
+                 transform: rotate(0deg);
+               }
+               100% {
+                 transform: rotate(360deg);
+               }
+             }
+
+             /* Hide content when preloader is active */
+             #content {
+               display: none;
+             }
+
+             .welcome-message, .no-results-message {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 60vh;
+              text-align: center;
+            }
+            
+            .welcome-message p, .no-results-message p {
+              font-size: 1.5em;
+              color: #666;
+              background-color: #f9f9f9;
+              padding: 20px 40px;
+              border-radius: 8px;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            
+             
+    </style>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/bootstrap.css' %}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
+      integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4="
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css"
+      integrity="sha256-UK1EiopXIL+KVhfbFa8xrmAWPeBjMVdvYMYkTAEv/HI="
+      crossorigin="anonymous"
+    />
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Recipes</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/bootstrap.css' %}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
+      integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4="
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css"
+      integrity="sha256-UK1EiopXIL+KVhfbFa8xrmAWPeBjMVdvYMYkTAEv/HI="
+      crossorigin="anonymous"
+    />
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="preloader-overlay">
+      <div class="preloader-container">
+        <div class="preloader"></div>
+      </div>
+    </div>
+    <div id="content">
+      <div class="loader"></div>
+      <div class="hero_area">
+        <header class="header_section">
+          <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg custom_nav-container">
+              <a class="navbar-brand" href= {% url "home" %}>
+                <span>Recipe Box</span>
+              </a>
+              <div class="" id="">
+                <div class="User_option">
+                  {% if user.is_authenticated %}
+              
+                  <a href="{% url 'explore_recipes' %}">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <span>Global Recipes, One Click Away</span>
+                  </a>
+
+          
+                    <a href="{% url 'logout_page' %}">
+                      <i class="fa fa-user" aria-hidden="true"></i>
+                      <span>Logout</span>
+                    </a>
+                    
+                 {% else %}
+                 
+                    <a href="{% url 'login_page' %}">
+                      <i class="fa fa-user" aria-hidden="true"></i>
+                      <span>Login</span>
+                    </a>
+                    
+                    {% endif %}
+               
+                  <a href="{% url "home" %}">
+                    <span>Home</span>
+                  </a>
+                </div>
+              </div>
+            </nav>
+          </div>
+        </header>
+
+        <section class="slider_section">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-10 mx-auto">
+                <div class="detail-box">
+                  <h1>Discover Modern & Classic Recipes</h1>
+                  <p>
+                    "A food community where everyone shares their traditional
+                    recipes."
+                  </p>
+                </div>
+                <div class="find_container">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col">
+                       
+                       
+                        <form method="GET" action="{% url 'user_pro' %}">
+                         
+                       
+                          <div class="form-row">
+                            <div class="form-group col-lg-5">
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="inputHotel"
+                                name="Search"
+                                placeholder="Search Saved Recipes by Name"
+                              />
+                            </div>
+
+                            <div class="form-group col-lg-3">
+                              <div class="btn-box">
+                                <button type="submit" class="btn">
+                                  Search
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                     
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="slider_container">
+            <div class="item">
+              <div class="img-box">
+                <img src="/static/images/slider-img1.png" alt="" />
+              </div>
+            </div>
+            <div class="item">
+              <div class="img-box">
+                <img src="/static/images/slider-img2.png" alt="" />
+              </div>
+            </div>
+            <div class="item">
+              <div class="img-box">
+                <img src="/static/images/slider-img3.png" alt="" />
+              </div>
+            </div>
+            <div class="item">
+              <div class="img-box">
+                <img src="/static/images/slider-img4.png" alt="" />
+              </div>
+            </div>
+            <div class="item">
+              <div class="img-box">
+                <img src="/static/images/slider-img1.png" alt="" />
+              </div>
+            </div>
+            <div class="item">
+              <div class="img-box">
+                <img src="/static/images/slider-img2.png" alt="" />
+              </div>
+            </div>
+            <div class="item">
+              <div class="img-box">
+                <img src="/static/images/slider-img3.png" alt="" />
+              </div>
+            </div>
+            <div class="item">
+              <div class="img-box">
+                <img src="/static/images/slider-img4.png" alt="" />
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="main">
+        {% if queryset %}
+          <ul class="cards">
+            {% for recipe in queryset %}
+              <li class="cards_item">
+                <div class="card">
+                  <div class="card_image">
+                    <img src="{{ recipe.recipe_image }}" alt="Recipe Image">
+                  </div>
+                  <h2 class="card_title">{{ recipe.recipe_label }}</h2>
+                  <div class="card_content">
+                    <div class="card_text">
+                      <p>Meal: {{ recipe.meal_type }}</p>
+                      <p>Cuisine: {{ recipe.cuisine_type }}</p>
+                      <p>Type: {{ recipe.dish_type }}</p>
+                      <p>Source: {{ recipe.source }}</p>
+                    </div>
+                  </div>
+                  <div class="button-container">
+                    <a href="{% url 'delete_recipe' id=recipe.id source='saved' %}">
+                      <button class="btn delete-btn btn-danger">Delete</button>
+                    </a>
+                    <a href="{{ recipe.recipe_url }}">
+                      <button class="btn btn-success">Go to recipe</button>
+                    </a>
+                  </div>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+      
+          <!-- Pagination -->
+          {% if queryset.has_other_pages %}
+            <div class="pagination-container">
+              <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                  {% if queryset.has_previous %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page=1">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ queryset.previous_page_number }}">Previous</a>
+                    </li>
+                  {% else %}
+                    <li class="page-item disabled">
+                      <span class="page-link">&laquo; First</span>
+                    </li>
+                    <li class="page-item disabled">
+                      <span class="page-link">Previous</span>
+                    </li>
+                  {% endif %}
+                  <li class="page-item">
+                    <span class="current page-link">Page {{ queryset.number }} of {{ queryset.paginator.num_pages }}</span>
+                  </li>
+                  {% if queryset.has_next %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ queryset.next_page_number }}">Next</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ queryset.paginator.num_pages }}">Last &raquo;</a>
+                    </li>
+                  {% else %}
+                    <li class="page-item disabled">
+                      <span class="page-link">Next</span>
+                    </li>
+                    <li class="page-item disabled">
+                      <span class="page-link">Last &raquo;</span>
+                    </li>
+                  {% endif %}
+                </ul>
+              </nav>
+            </div>
+          {% endif %}
+        {% else %}
+             {% if search_performed %}
+        <!-- No search results message -->
+        <div class="no-results-message">
+          <p>No saved recipes found.</p>
+        </div>
+           {% else %}
+        <!-- First-time user welcome message -->
+        <div class="welcome-message">
+          <p>You haven't saved any recipes yet. Find some inspiration here!</p>
+        </div>
+              {% endif %}
+        {% endif %}
+      </div>
+      
+      <section class="about_section layout_padding">
+        <div class="container">
+          <div class="col-md-11 col-lg-10 mx-auto">
+            <div class="heading_container heading_center">
+              <h2>About Us</h2>
+            </div>
+            <div class="box">
+              <div class="col-md-7 mx-auto">
+                <div class="img-box">
+                  <img
+                    src="{% static 'images/about-img.jpg' %}"
+                    class="box-img"
+                    alt="About Us"
+                  />
+                </div>
+              </div>
+              <div class="detail-box">
+                <p>
+                  Welcome to our food recipe website! We are passionate about
+                  sharing delicious recipes from around the world. Our mission
+                  is to inspire home cooks of all skill levels to explore new
+                  flavors and cuisines, and to provide them with easy-to-follow
+                  recipes and cooking tips. Whether you're a seasoned chef or
+                  just starting out in the kitchen, you'll find something
+                  delicious to try on our site.
+                </p>
+                <a href="{% url "explore_recipes" %}">
+                  <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer_container">
+        <section class="info_section">
+          <div class="container">
+            <div class="social_box">
+              <a
+                href="https://www.instagram.com/roshan_ramani01?igsh=MWlpNWI2MWZmMDB6Yg%3D%3D&utm_source=qr"
+              >
+              <i class="fa fa-instagram" aria-hidden="true"></i>
+            </a>
+          
+              <a
+                href="https://www.linkedin.com/in/roshan-ramani-0510102b2?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+              >
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <footer class="footer_section">
+          <div class="container">
+            <p>
+              Created By: <strong>Roshan Ramani</strong>
+              <br />
+              <span id="displayYear"></span>
+            </p>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+          document.querySelector(".preloader-overlay").style.display = "none";
+          document.getElementById("content").style.display = "block";
+        }, 1000);
+      });
+    </script>
+    <script>
+      // Check if there are messages with the "success" tag
+      document.addEventListener("DOMContentLoaded", function() {
+        const successMessages = document.querySelectorAll('.alert-success');
+        if (successMessages.length > 0) {
+          const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+          successModal.show();
+        }
+      });
+    </script>
+    
+    <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"
+      integrity="sha256-Zr3vByTlMGQhvMfgkQ5BtWRSKBGa2QlspKYJnkjZTmo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+  </body>
+</html>

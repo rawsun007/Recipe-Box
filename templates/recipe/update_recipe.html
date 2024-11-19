@@ -1,0 +1,283 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>update Recipe</title>
+
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/css/fontawsom-all.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'assets/css/style.css' %}"
+    />
+
+    <style>
+     
+      /* Preloader Styles */
+      .preloader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(
+          255,
+          255,
+          255,
+          0.8
+        ); /* Semi-transparent white background */
+        z-index: 9999; /* Ensure it's on top */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .preloader-container {
+        text-align: center;
+      }
+
+      .preloader {
+        background: #000 url(/static/temp/images/lg.gif) center
+        border: 8px solid #f3f3f3; /* Light grey */
+        border-top: 8px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite; /* Spin animation */
+      }
+
+      /* Spin Animation */
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Hide content when preloader is active */
+      #content {
+        display: none;
+      }
+
+      body {
+        background-image: url("{% static 'assets/images/bg3.jpg' %}");
+        background-size: cover; /* Make sure the image covers the entire background */
+        background-repeat: no-repeat; /* Prevent the image from repeating */
+        background-position: center center; /* Center the image */
+        height: 100vh; /* Ensure the body takes up the full height of the viewport */
+        margin: 0; /* Remove default margin */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      /* General container styling */
+      .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Form styling */
+      .signin-form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .text-box-cont {
+        margin-bottom: 15px;
+      }
+
+      /* Input fields styling */
+      ..mb-3,
+      .mb-3 {
+        margin-bottom: 15px;
+      }
+
+      .form-control {
+        padding: 10px 15px;
+        font-size: 16px;
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+        transition: border-color 0.3s;
+      }
+
+      .form-control:focus {
+        border-color: #80bdff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(128, 189, 255, 0.5);
+      }
+
+      .textarea {
+        height: 150px;
+        width: 400px;
+        resize: none; /* Prevents the user from resizing the textarea */
+      }
+      .form-label {
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #495057;
+      }
+
+      /* Button styling */
+      .btn {
+        padding: 10px 15px;
+        font-size: 16px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s, box-shadow 0.3s;
+      }
+
+      .btn-primary {
+        background-color: #007bff;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background-color: #0056b3;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+      }
+
+      /* Alert message styling */
+      .alert {
+        margin-top: 15px;
+        padding: 10px 15px;
+        border-radius: 4px;
+      }
+
+      .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+
+      /* Responsive design */
+      @media (max-width: 768px) {
+        .form-container {
+          padding: 15px;
+        }
+
+        .form-control,
+        .btn {
+          font-size: 14px;
+          padding: 8px 12px;
+        }
+      }
+      .heading-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px; /* Adjust margin as needed */
+      }
+
+      .form-heading {
+        font-size: 24px; /* Adjust font size as needed */
+        font-weight: bold;
+        color: #333; /* Adjust color as needed */
+        text-align: center;
+      }
+
+      .form-container {
+        padding-bottom: 0; /* Adjust padding as needed */
+      }
+
+      .form-group {
+        margin-bottom: 0; /* Adjust margin as needed */
+      }
+
+      .submit {
+        margin-bottom: 0; /* Adjust margin as needed */
+      }
+    </style>
+  </head>
+
+  <body class="img js-fullheight">
+    <div class="preloader-overlay">
+      <div class="preloader-container">
+        <div class="preloader"></div>
+      </div>
+    </div>
+    <div id="content">
+      <div class="container d-flex justify-content-center align-items-center">
+        <div class="form-container">
+          <form
+            action="#"
+            class="signin-form"
+            method="post"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %}
+            <div class="text-box-cont">
+              <div class="heading-container">
+                <p class="form-heading">Update Recipes</p>
+              </div>
+              <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  value="{{recipe.name}}"
+                  placeholder="Enter food name"
+                  name="name"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="about" class="form-label">About</label>
+                <textarea
+                  class="form-control textarea"
+                  placeholder="Write about food"
+                  name="about"
+                  rows="5"
+                  required
+                >
+{{ recipe.about }}</textarea
+                >
+              </div>
+
+              <div class="mb-3">
+                <label for="img" class="form-label">Choose Image</label>
+                <input name="img" type="file" class="form-control" />
+              </div>
+              <div class="form-group">
+                <button
+                  type="submit"
+                  class="form-control btn btn-primary submit px-3"
+                >
+                  Submit
+                </button>
+
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+          document.querySelector(".preloader-overlay").style.display = "none";
+          document.getElementById("content").style.display = "block";
+        }, 3000);
+      });
+    </script>
+    <script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/popper.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/js/script.js' %}"></script>
+  </body>
+</html>

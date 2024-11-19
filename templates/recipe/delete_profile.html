@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 400px;
+            padding: 30px;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        .icon {
+            font-size: 50px;
+            color: #d9534f;
+            margin-bottom: 15px;
+        }
+        h2 {
+            color: #d9534f;
+            margin: 10px 0;
+            font-size: 24px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 20px;
+        }
+        p.warning {
+            font-weight: bold;
+            color: #d9534f;
+            margin: 20px 0;
+        }
+        .btn {
+            padding: 12px 24px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        .delete-btn {
+            background-color: #d9534f;
+            color: #fff;
+        }
+        .delete-btn:hover {
+            background-color: #c9302c;
+        }
+        .cancel-btn {
+            background-color: #f0f2f5;
+            color: #333;
+            text-decoration: none;
+            border: 1px solid #ccc;
+        }
+        .cancel-btn:hover {
+            background-color: #e6e6e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h2>Delete Account</h2>
+        <p class="warning">This action is irreversible!</p>
+        <p>Are you sure you want to delete your account? All your data will be permanently deleted, and you will not be able to recover your account.</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn delete-btn">Yes, delete my account</button>
+            <a href="{% url 'home' %}" class="btn cancel-btn">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>
