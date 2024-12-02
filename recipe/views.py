@@ -15,6 +15,10 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)
+
+
 # Add a community recipe
 @login_required(login_url="/recipe/login_page/")
 def add(request):
@@ -225,13 +229,10 @@ def explore_recipes(request):
         'search_performed': bool(recipe_name),  # Indicates if a search was performed
     })
 
-
-
-
-
 # User-specific saved recipes
+
 @login_required(login_url="/recipe/login_page/")
-def user_pro(request):
+def save_user_recipe(request):
     if request.method == 'POST':
         recipe_label = request.POST.get('recipe_label')
         recipe_url = request.POST.get('recipe_url')
@@ -241,13 +242,18 @@ def user_pro(request):
         dish_type = request.POST.get('dish_type')
         source = request.POST.get('source')
 
-
+        # Validate input data
+        if not all([recipe_label, recipe_url, recipe_image_url]):
+            messages.error(request, "Invalid recipe data. Please try again.")
+            return redirect('user_pro')
 
         try:
+            # Sanitize the label for cloud storage
             sanitized_label = re.sub(r"[^a-zA-Z0-9_-]", "_", recipe_label)
             folder_path = f"recipes/{request.user.id}"
             img_url = upload_image_to_cloudinary(recipe_image_url, folder=folder_path, public_id=sanitized_label)
 
+            # Save the recipe
             saved_recipe = SavedRecipe.objects.create(
                 recipe_label=recipe_label,
                 recipe_url=recipe_url,
@@ -258,13 +264,31 @@ def user_pro(request):
                 source=source
             )
 
+            # Associate with the user's profile
             user_profile, _ = UserProfile.objects.get_or_create(user=request.user)
             user_profile.saved_recipes.add(saved_recipe)
 
+            messages.success(request, f"Recipe '{recipe_label}' saved successfully!")
         except Exception as e:
             messages.error(request, f"An error occurred: {e}")
             return redirect('user_pro')
 
+        # Redirect to the user profile after saving
+        return redirect('user_pro')
+    else:
+        messages.error(request, "Invalid request method.")
+        return redirect('user_pro')
+    
+
+
+
+
+
+    
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+    
+@login_required(login_url="/recipe/login_page/")
+def user_pro(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
     saved_recipes = user_profile.saved_recipes.all().order_by('-id')
 
@@ -277,9 +301,13 @@ def user_pro(request):
     # Implement pagination
     paginator = Paginator(saved_recipes, 3)
     page_number = request.GET.get('page', 1)
-    page_obj = paginator.get_page(page_number)
+    try:
+        page_obj = paginator.get_page(page_number)
+    except (EmptyPage, PageNotAnInteger):
+        page_obj = paginator.get_page(1)  # Default to the first page
 
     return render(request, 'recipe/user_pro.html', {
         'queryset': page_obj,
         'search_performed': search_performed,
+        'search_query': search_query,
     })

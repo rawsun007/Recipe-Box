@@ -1,11 +1,14 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}My Site{% endblock %}</title>
+    <title>{% block title %}Password Forgot{% endblock %}</title>
 
     <style>
+
+   
       *,
       *::before,
       *::after {
@@ -24,7 +27,22 @@
         height: 100vh;
         margin: 0;
       }
+      #password_error {
+        color: #721c24; /* A slightly darker red for better contrast */
+        font-size: 14px; /* Maintain readable font size */
+        font-weight: 500; /* Medium weight for professional look */
+        background-color: rgba(248, 215, 218, 0.9); /* Light red with transparency */
+        border: 1px solid #f5c6cb; /* Match border to background */
+        padding: 15px; /* Increased padding for spacing */
+        border-radius: 8px; /* Rounded corners for a softer appearance */
+        margin-top: 15px; /* Add space above the error box */
+        line-height: 1.6; /* Better spacing between lines */
+        display: flex; /* Use flexbox for aligning icon and text */
+        align-items: center; /* Vertically align text with icon */
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+      }
       
+
       .container {
         max-width: 500px;
         width: 90%;
@@ -71,6 +89,7 @@
       
       button {
         padding: 0.75rem 1.5rem;
+        margin-top: 10px;
         border: none;
         border-radius: 5px;
         font-size: 1rem;
@@ -99,8 +118,23 @@
       }
       
     </style> 
+
+    <!-- Favicon -->
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/images/favicon-16x16.png' %}">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/images/favicon-32x32.png' %}">
+<link rel="icon" type="image/png" sizes="192x192" href="{% static 'assets/images/android-chrome-192x192.png' %}">
+<link rel="icon" type="image/png" sizes="512x512" href="{% static 'assets/images/android-chrome-512x512.png' %}">
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/images/apple-touch-icon.png' %}">
+
+<!-- Web Manifest -->
+<link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}">
+
+
 </head>
-  <body>
+
+<body>
     <div class="container">
       <main>{% block content %}{% endblock %}</main>
     </div>

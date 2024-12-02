@@ -1,0 +1,27 @@
+{
+    "name": "Recipe Box",
+    "short_name": "RecipeBox",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4CAF50",
+    "description": "Find, save, and share your favorite recipes with Recipe Box.",
+    "icons": [
+      {
+        "src": "/static/assets/images/android-chrome-192x192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "/static/assets/images/android-chrome-512x512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      },
+      {
+        "src": "/static/assets/images/apple-touch-icon.png",
+        "type": "image/png",
+        "sizes": "180x180"
+      }
+    ]
+  }
+  

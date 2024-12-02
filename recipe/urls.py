@@ -30,8 +30,9 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('explore_recipes/', views.explore_recipes, name='explore_recipes'),
     path('user_pro/', views.user_pro, name='user_pro'),
-    path('delete_profile/', views.delete_profile, name='delete_profile'),    
-    
+    path('delete_profile/', views.delete_profile, name='delete_profile'),     
+    path('save_user_recipe/', views.save_user_recipe, name='save_user_recipe'),
+
 ]
 
 if settings.DEBUG:

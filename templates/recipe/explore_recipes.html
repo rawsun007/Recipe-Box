@@ -11,7 +11,7 @@
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Recipes</title>
+    <title>Recipe&#39;s Home - Recipe Box</title>
     <style>
       .search1-button {
         background-color: #4caf50; /* Green */
@@ -353,6 +353,19 @@
     />
     <link href="{% static 'css/style.css' %}" rel="stylesheet" />
     <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+    <!-- Favicon -->
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/images/favicon-16x16.png' %}">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/images/favicon-32x32.png' %}">
+<link rel="icon" type="image/png" sizes="192x192" href="{% static 'assets/images/android-chrome-192x192.png' %}">
+<link rel="icon" type="image/png" sizes="512x512" href="{% static 'assets/images/android-chrome-512x512.png' %}">
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/images/apple-touch-icon.png' %}">
+
+<!-- Web Manifest -->
+<link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}">
+
   </head>
 
   <body>
@@ -482,7 +495,7 @@
              
               <div class="button-container">
                 <a href="{{ hit.recipe.url }}"><button type="button" class="btn update-btn btn-success">Go to Recipe</button></a>
-                <form method="POST" action="{% url 'user_pro' %}">
+                <form method="POST" action="{% url 'save_user_recipe' %}">
                   {% csrf_token %}
                   <input type="hidden" name="recipe_label" value="{{ hit.recipe.label }}">
                   <input type="hidden" name="recipe_url" value="{{ hit.recipe.url }}">
@@ -540,7 +553,7 @@
         <!-- Display a welcome message if no search has been performed -->
         <div style="display: flex; justify-content: center; align-items: center; height: 60vh; text-align: center;">
           <p style="font-size: 1.5em; color: #666; background-color: #f9f9f9; padding: 20px 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-            Welcome to the Recipe Finder! Start by searching for a recipe using the search bar above.
+            Welcome to the Recipe Box! Start by searching for a recipe using the search bar above.
           </p>
         </div>
       {% endif %}
