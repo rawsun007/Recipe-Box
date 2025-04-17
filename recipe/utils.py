@@ -12,8 +12,8 @@ APP_KEY = os.getenv("APP_KEY")
 
 
 
-def fetch_recipes(recipe_name, start=0, page_size=3):
-    api_url = "https://api.edamam.com/search"
+def fetch_recipes(recipe_name, start=0):
+    api_url = "https://api.edamam.com/api/recipes/v2"
     params = {
         'type': 'public',
         'q': recipe_name,
@@ -30,20 +30,26 @@ def fetch_recipes(recipe_name, start=0, page_size=3):
         'Accept-Language': 'en'
     }
 
-    response = requests.get(api_url, params=params)
-
-    if response.status_code == 200:
+    try:
+        response = requests.get(api_url, params=params, headers=headers)
+        response.raise_for_status()
         data = response.json()
-        recipes = data.get('hits', [])
-        total_recipes = data.get('count', 0)  # Total available recipes from the API
-        has_more = (start + page_size) < total_recipes
-    else:
-        print("Error fetching recipes:", response.status_code)
-        recipes, has_more, total_recipes = [], False, 0
+        
 
-    return recipes, has_more, total_recipes
+        if 'hits' in data:
+            all_recipes = data.get('hits', [])
+            total_recipes = data.get('count', 0)
+            has_more = len(all_recipes) < total_recipes
+            return all_recipes, has_more, total_recipes
+        else:
+            print("Error: No hits in response")
+            return [], False, 0
 
-
+    except requests.exceptions.RequestException as e:
+        print(f"API Error: {e}")
+        return [], False, 0
+    
+    
 def clean_filename(filename):
     if not filename:
         raise ValueError("Filename is required to clean it.")
