@@ -1,0 +1,139 @@
+<div class="main">
+  {% if search_performed %}
+    <div class="cards-container">
+      {% for hit in recipes %}
+      <div class="recipe-card">
+        <!-- Card Image -->
+        <div class="card-image">
+          <img src="{{ hit.recipe.image }}" alt="{{ hit.recipe.label }}">
+          {% if hit.recipe.cuisineType %}
+            <span class="cuisine-badge">{{ hit.recipe.cuisineType.0|title }}</span>
+          {% endif %}
+        </div>
+        
+        <!-- Card Content -->
+        <div class="card-content">
+          <h2 class="recipe-title">{{ hit.recipe.label }}</h2>
+          
+          <!-- Recipe Stats -->
+          <div class="recipe-stats">
+            <div class="stat-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+              <span>{{ hit.recipe.calories|floatformat:0 }} cal</span>
+            </div>
+            
+            {% if hit.recipe.totalTime > 0 %}
+            <div class="stat-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>{{ hit.recipe.totalTime }} min</span>
+            </div>
+            {% endif %}
+            
+            {% if hit.recipe.yield > 0 %}
+            <div class="stat-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span>Serves {{ hit.recipe.yield }}</span>
+            </div>
+            {% endif %}
+          </div>
+          
+          <!-- Ingredients Preview -->
+          <div class="ingredients-preview">
+            <h3>Ingredients</h3>
+            {% if hit.recipe.ingredientLines %}
+              <ul>
+                {% for ingredient in hit.recipe.ingredientLines|slice:":3" %}
+                <li>{{ ingredient }}</li>
+                {% endfor %}
+                {% if hit.recipe.ingredientLines|length > 3 %}
+                <li class="more-ingredients">+ {{ hit.recipe.ingredientLines|length|add:"-3" }} more</li>
+                {% endif %}
+              </ul>
+            {% else %}
+              <p>No ingredients listed</p>
+            {% endif %}
+          </div>
+          
+          <!-- Card Actions -->
+          <div class="card-actions">
+            <a href="{{ hit.recipe.url }}" target="_blank" class="btn-primary">View Recipe</a>
+            
+            <form method="POST" action="{% url 'save_user_recipe' %}">
+              {% csrf_token %}
+              <input type="hidden" name="recipe_label" value="{{ hit.recipe.label }}">
+              <input type="hidden" name="recipe_url" value="{{ hit.recipe.url }}">
+              <input type="hidden" name="recipe_image" value="{{ hit.recipe.image }}">
+              <input type="hidden" name="meal_type" value="{{ hit.recipe.mealType|join:", " }}">
+              <input type="hidden" name="cuisine_type" value="{{ hit.recipe.cuisineType|join:", " }}">
+              <input type="hidden" name="dish_type" value="{% if hit.recipe.dishType %}{{ hit.recipe.dishType|join:", " }}{% else %}N/A{% endif %}">
+              <input type="hidden" name="source" value="{{ hit.recipe.source }}">
+              <input type="hidden" name="calories" value="{{ hit.recipe.calories }}">
+              <input type="hidden" name="total_time" value="{{ hit.recipe.totalTime }}">
+              <input type="hidden" name="yield" value="{{ hit.recipe.yield }}">
+
+              {% if user.is_authenticated %}
+              <button type="submit" class="btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                Save
+              </button>
+              {% else %}
+              <button type="button" class="btn-secondary" onclick="promptLogin()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                Save
+              </button>
+              {% endif %}
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- No recipes found message -->
+    {% if not recipes %}
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4v4h-4z"/><path d="M19 10v11H5V10"/><path d="M21 6H3v4h18V6z"/></svg>
+        <h2>No Recipes Found</h2>
+        <p>No recipes found from Global sources. Try different search terms.</p>
+      </div>
+    {% endif %}
+
+    <!-- Pagination -->
+    {% if recipes %}
+    <div class="pagination">
+      {% if has_prev %}
+      <button type="button" 
+              class="pagination-btn prev-btn"
+              data-page="{{ prev_page }}"
+              data-api-start="{{ api_start }}">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Previous
+      </button>
+      {% endif %}
+      
+      <span class="page-indicator">Page {{ page }} of {{ total_pages }}</span>
+      
+      {% if has_next %}
+      <button type="button" 
+              class="pagination-btn next-btn"
+              data-page="{{ next_page }}"
+              data-api-start="{% if need_more_data %}{{ next_api_start }}{% else %}{{ api_start }}{% endif %}">
+        Next
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      {% endif %}
+    </div>
+    {% endif %}
+  
+  
+  {% else %}
+    <!-- Welcome message -->
+    <div class="welcome">
+      <div class="welcome-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+      </div>
+      <h1>Welcome to Recipe Box</h1>
+      <p>Search for recipes using the search bar above to discover delicious meals from around the world.</p>
+    </div>
+  {% endif %}
+</div>

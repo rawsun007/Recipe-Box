@@ -1,378 +1,1841 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Recipe&#39;s Home - Recipe Box</title>
-    <style>
-      .search1-button {
-        background-color: #4caf50; /* Green */
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-        border-radius: 25px; /* Makes the button cylindrical */
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>Recipe&#39;s Home - Recipe Box</title>
+  <!-- Existing CSS and Preloader Styles -->
+  <style>
+    .search1-button {
+      background-color: #4caf50;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 25px;
+      /* Makes the button cylindrical */
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .style-controls {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .style-btn {
+      background-color: #c89b3f;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .style-btn:hover {
+      background-color: #a67c28;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #currentStyle {
+      font-size: 14px;
+      color: #666;
+    }
+
+    :root {
+      /* Font families */
+      --font-primary: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+      --font-display: 'Clash Display', 'DM Sans', sans-serif;
+
+      /* Font families for each card design */
+      --font-classic: 'Georgia', serif;
+      --font-elegant: 'Playfair Display', serif;
+      --font-journal: 'Crimson Text', serif;
+      --font-modern: 'Montserrat', sans-serif;
+      --font-vintage: 'Times New Roman', serif;
+      --font-futuristic: 'Orbitron', sans-serif;
+
+      /* Color palette */
+      --color-primary: #FF6B35;
+      --color-primary-light: #FF8F66;
+      --color-primary-dark: #E55A2B;
+      --color-secondary: #2EC4B6;
+      --color-text: #1F2937;
+      --color-text-light: #6B7280;
+      --color-text-lighter: #9CA3AF;
+      --color-background: #FFFFFF;
+      --color-background-light: #F9FAFB;
+      --color-border: #E5E7EB;
+      --color-accent: #FF6B35;
+
+      /* Futuristic Glow Colors */
+      --color-glow-base: #0ff;
+      --color-glow-accent: #8a2be2;
+      --color-glow-bg: rgba(255, 255, 255, 0.05);
+      --color-glow-border: rgba(0, 255, 255, 0.3);
+      --color-glow-text: #e0f7fa;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-elevated: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+      /* Transitions */
+      --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Remove orange dots from all ingredient lists */
+    .ingredients-preview li::before {
+      display: none !important;
+    }
+
+    /* Font and button overrides for each card design */
+    .cards-container.classic-style .recipe-title,
+    .cards-container.classic-style .card-content,
+    .cards-container.classic-style .ingredients-preview,
+    .cards-container.classic-style .stat-item {
+      font-family: var(--font-classic);
+    }
+    .cards-container.classic-style .btn-primary,
+    .cards-container.classic-style .btn-secondary {
+      font-family: var(--font-classic);
+      border-radius: 8px;
+      background: #2d3748;
+      color: #fff;
+    }
+    .cards-container.classic-style .btn-primary:hover,
+    .cards-container.classic-style .btn-secondary:hover {
+      background: #222;
+      color: #fff;
+    }
+
+    .cards-container.elegant-style .recipe-title,
+    .cards-container.elegant-style .card-content,
+    .cards-container.elegant-style .ingredients-preview,
+    .cards-container.elegant-style .stat-item {
+      font-family: var(--font-elegant);
+    }
+    .cards-container.elegant-style .btn-primary,
+    .cards-container.elegant-style .btn-secondary {
+      font-family: var(--font-elegant);
+      border-radius: 0;
+      background: #222;
+      color: #fff;
+      border: 2px solid #222;
+    }
+    .cards-container.elegant-style .btn-primary:hover,
+    .cards-container.elegant-style .btn-secondary:hover {
+      background: #fff;
+      color: #222;
+    }
+
+    .cards-container.recipe-journal .recipe-title,
+    .cards-container.recipe-journal .card-content,
+    .cards-container.recipe-journal .ingredients-preview,
+    .cards-container.recipe-journal .stat-item {
+      font-family: var(--font-journal);
+    }
+    .cards-container.recipe-journal .btn-primary,
+    .cards-container.recipe-journal .btn-secondary {
+      font-family: var(--font-journal);
+      font-style: italic;
+      border-radius: 0.5rem;
+      background: transparent;
+      color: #8B4513;
+      border: 2px solid #8B4513;
+    }
+    .cards-container.recipe-journal .btn-primary:hover,
+    .cards-container.recipe-journal .btn-secondary:hover {
+      background: #8B4513;
+      color: #fff9f0;
+    }
+
+    .cards-container.modern-edge .recipe-title,
+    .cards-container.modern-edge .card-content,
+    .cards-container.modern-edge .ingredients-preview,
+    .cards-container.modern-edge .stat-item {
+      font-family: var(--font-modern);
+    }
+    .cards-container.modern-edge .btn-primary,
+    .cards-container.modern-edge .btn-secondary {
+      font-family: var(--font-modern);
+      border-radius: 8px;
+      background: #FF6B35;
+      color: #fff;
+      text-transform: uppercase;
+    }
+    .cards-container.modern-edge .btn-primary:hover,
+    .cards-container.modern-edge .btn-secondary:hover {
+      background: #E55A2B;
+      color: #fff;
+    }
+
+    .cards-container.vintage-pastel .recipe-title,
+    .cards-container.vintage-pastel .card-content,
+    .cards-container.vintage-pastel .ingredients-preview,
+    .cards-container.vintage-pastel .stat-item {
+      font-family: var(--font-vintage);
+    }
+    .cards-container.vintage-pastel .btn-primary,
+    .cards-container.vintage-pastel .btn-secondary {
+      font-family: var(--font-vintage);
+      border-radius: 0.75rem;
+      background: #8B5E3C;
+      color: #fff;
+    }
+    .cards-container.vintage-pastel .btn-secondary:hover {
+      background-color: #F2E2CD;
+      color: #8B5E3C;
+    }
+
+    /* Futuristic Glow Card Design */
+    .cards-container.futuristic-glow .recipe-card {
+      backdrop-filter: blur(14px);
+      background: var(--color-glow-bg);
+      border: 1.5px solid var(--color-glow-border);
+      border-radius: 24px 0 24px 0;
+      box-shadow: 0 0 24px rgba(0, 255, 255, 0.15);
+      font-family: var(--font-futuristic);
+      color: var(--color-glow-text);
+      padding: 1.5rem;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .cards-container.futuristic-glow .recipe-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 0 32px rgba(0, 255, 255, 0.4);
+    }
+
+    .cards-container.futuristic-glow .card-image {
+      border-radius: 24px 0 0 0;
+      overflow: hidden;
+      border-bottom: 2px solid var(--color-glow-accent);
+    }
+    .cards-container.futuristic-glow .card-image img {
+      filter: contrast(1.1) brightness(1.1);
+      transition: transform 0.3s ease;
+    }
+    .cards-container.futuristic-glow .card-image img:hover {
+      transform: scale(1.05);
+    }
+
+    .cards-container.futuristic-glow .recipe-title {
+      font-size: 1.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--color-glow-text);
+      margin: 1rem 0 0.5rem;
+    }
+
+    .cards-container.futuristic-glow .card-content {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--color-glow-text);
+    }
+
+    .cards-container.futuristic-glow .btn-primary,
+    .cards-container.futuristic-glow .btn-secondary {
+      font-family: var(--font-futuristic);
+      background: transparent;
+      border: 2px solid var(--color-glow-base);
+      color: var(--color-glow-text);
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 12px rgba(0, 255, 255, 0.2);
+    }
+
+    .cards-container.futuristic-glow .btn-primary:hover,
+    .cards-container.futuristic-glow .btn-secondary:hover {
+      background: var(--color-glow-base);
+      color: #000;
+      box-shadow: 0 0 18px rgba(0, 255, 255, 0.6);
+    }
+
+    .cards-container.futuristic-glow .cuisine-badge {
+      background: var(--color-glow-accent);
+      color: #fff;
+      font-weight: bold;
+      border-radius: 0 12px 0 12px;
+      padding: 0.3rem 0.8rem;
+      box-shadow: 0 0 10px rgba(138, 43, 226, 0.6);
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    /* 
+        =======================================================
+        Base card layout (keeps cards in the center).
+        =======================================================
+      */
+    /* Card Design 1: Classic */
+    .cards-container.classic-style .recipe-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.09);
+      border: 1px solid #e5e7eb;
+      font-family: 'Georgia', serif;
+      color: #222;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .cards-container.classic-style .card-image {
+      border-radius: 18px 18px 0 0;
+      overflow: hidden;
+    }
+
+    .cards-container.classic-style .recipe-title {
+      font-size: 1.5rem;
+      color: #2d3748;
+      font-family: 'Georgia', serif;
+      margin-bottom: 0.75rem;
+    }
+
+    .cards-container.classic-style .card-content {
+      padding: 1.5rem 1.5rem 1.2rem 1.5rem;
+    }
+
+    /* Card Design 3: Elegant Border */
+    .cards-container.elegant-style .recipe-card {
+      background: #fff;
+      border-radius: 0;
+      border: 3px double #222;
+      box-shadow: 0 8px 32px #2222, 0 2px 0 #222 inset;
+      font-family: 'Playfair Display', serif;
+      color: #222;
+      position: relative;
+      overflow: visible;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .cards-container.elegant-style .card-image {
+      border-radius: 0;
+      overflow: hidden;
+      border-bottom: 3px double #222;
+    }
+    .cards-container.elegant-style .card-image img {
+      filter: grayscale(0.15) contrast(1.08);
+    }
+    .cards-container.elegant-style .cuisine-badge {
+      background: #fff;
+      color: #222;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      border: 1.5px solid #222;
+      border-radius: 0 0 12px 12px;
+      left: 0;
+      right: auto;
+      top: 0;
+      padding: 0.3rem 1.2rem;
+      box-shadow: 0 2px 8px #2222;
+    }
+    .cards-container.elegant-style .recipe-title {
+      font-size: 2rem;
+      font-family: 'Playfair Display', serif;
+      color: #222;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 1px 0 #fff, 0 0 8px #2222;
+      letter-spacing: 1px;
+    }
+    .cards-container.elegant-style .card-content {
+      padding: 2rem 2rem 1.5rem 2rem;
+    }
+    .cards-container.elegant-style .btn-primary {
+      background: #222;
+      color: #fff;
+      border-radius: 0;
+      font-family: 'Playfair Display', serif;
+      border: 2px solid #222;
+      font-size: 1rem;
+    }
+    .cards-container.elegant-style .btn-primary:hover {
+      background: #fff;
+      color: #222;
+    }
+
+    /* Card Design: Recipe-Journal */
+    /* Card Design: Recipe‑Journal */
+.cards-container.recipe-journal .recipe-card {
+  background: #fff9f0;
+  border-radius: 0;
+  border: none;
+  box-shadow: 2px 2px 15px rgba(0,0,0,0.1);
+  font-family: 'Crimson Text', serif;
+  position: relative;
+  /* image height (200px) + border (10px) + breathing room */
+  padding: 20px;
+  padding-top: 250px;
+}
+
+/* ——— Image half‑circle ——— */
+.cards-container.recipe-journal .card-image {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 200px;
+  overflow: hidden;
+  border: 10px solid white;
+  border-radius: 0 0 200px 200px;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+  background: #fff;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.cards-container.recipe-journal .card-image img {
+  width: 100%; height: 300px;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 0 0 200px 200px;
+}
+
+/* hide unwanted badge */
+.cards-container.recipe-journal .cuisine-badge {
+  display: none;
+}
+
+/* ——— Content wrapper ——— */
+.cards-container.recipe-journal .card-content {
+  position: relative;
+  z-index: 2;
+  padding: 0;
+}
+
+/* decorative divider */
+.cards-container.recipe-journal .card-content::before {
+  content: '';
+  position: absolute;
+  top: 0; 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 1px;
+  background: #8B4513;
+  opacity: 0.3;
+  z-index: 2;
+}
+
+/* ——— Title ——— */
+.cards-container.recipe-journal .recipe-title,
+.cards-container.recipe-journal .card-content h2 {
+  text-align: center;
+  color: #8B4513;
+  font-style: italic;
+  font-size: 1.5rem;
+  margin: 0 0 10px;
+}
+
+/* ——— Stats row (Cal • Min • Serves) ——— */
+.cards-container.recipe-journal .recipe-stats {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid rgba(139, 69, 19, 0.2);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+.cards-container.recipe-journal .recipe-stats .stat-item {
+  color: #8B4513;
+  font-style: italic;
+  position: relative;
+  padding: 0 8px;
+}
+/* add a “|” after every item except the last */
+.cards-container.recipe-journal .recipe-stats .stat-item:not(:last-child)::after {
+  content: "|";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8B4513;
+}
+.cards-container.recipe-journal .recipe-stats .stat-item svg {
+  vertical-align: middle;
+}
+
+/* ——— Ingredients preview ——— */
+.cards-container.recipe-journal .ingredients-preview {
+  list-style: none;           /* remove bullets */
+  margin: 15px 0;             /* your spacing */
+  padding: 0;                 /* remove default ul padding */
+}
+.cards-container.recipe-journal .ingredients-preview h3 {
+  text-align: center;
+  color: #8B4513;
+  font-style: italic;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+.cards-container.recipe-journal .ingredients-preview li {
+  list-style: none;           /* just in case */
+  margin: 4px 0;              /* space between items */
+  color: #8B4513;
+  font-size: 1rem;
+  text-align: center;
+  padding: 0;
+}
+.cards-container.recipe-journal .ingredients-preview li::before {
+  display: none;
+}
+
+/* ——— Buttons ——— */
+.cards-container.recipe-journal .btn-primary,
+.cards-container.recipe-journal .btn-secondary {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  font-family: 'Crimson Text', serif;
+  font-style: italic;
+  padding: 6px 14px;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.cards-container.recipe-journal .btn-primary {
+  background: transparent;
+  border: 2px solid #8B4513;
+  color: #8B4513;
+  margin-right: 10px;
+}
+.cards-container.recipe-journal .btn-primary:hover {
+  background: #8B4513;
+  color: #fff9f0;
+}
+
+.cards-container.recipe-journal .btn-secondary {
+  background: transparent;
+  border: 1px solid #8B4513;
+  color: #8B4513;
+}
+
+/* Card Design 6: Modern‑Edge */
+.cards-container.modern-edge .recipe-card {
+  background: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.cards-container.modern-edge .card-image {
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(0 0, 100% 0, 100% 75%, 0% 100%);
+  height: 0;
+  padding-top: 60%;
+}
+
+.cards-container.modern-edge .card-image img {
+  position: absolute;
+  top: -10%;
+  left: 0;
+  width: 100%;
+  height: auto;
+  transform: scale(1.1);
+  transition: transform 0.4s ease;
+}
+
+.cards-container.modern-edge .recipe-card:hover .card-image img {
+  transform: scale(1.2);
+}
+
+.cards-container.modern-edge .recipe-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1F2937;
+  margin: 1rem;
+}
+
+.cards-container.modern-edge .card-content {
+  flex-grow: 1;
+  padding: 0 1rem 1rem;
+  color: #4B5563;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.cards-container.modern-edge .btn-primary {
+  background-color: #FF6B35;
+  color: #ffffff;
+  font-size: 1rem;
+  padding: 0.75rem;
+  margin: 0 1rem 1rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: background-color 0.2s ease;
+}
+
+.cards-container.modern-edge .btn-primary:hover {
+  background-color: #E55A2B;
+}
+
+/* Card Design 7: Vintage‑Pastel */
+.cards-container.vintage-pastel .recipe-card {
+  background: #FFFAF5;
+  border: 1px solid #F2EDE4;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  font-family: 'Crimson Text', serif;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cards-container.vintage-pastel .card-image {
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+}
+
+.cards-container.vintage-pastel .card-image img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 8px solid #FEF0E3;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transform: translateY(-25%);
+  background: #fff;
+}
+
+.cards-container.vintage-pastel .card-content {
+  padding: 3rem 1.5rem 1.5rem; /* extra top padding to accommodate circular image */
+  text-align: center;
+  flex-grow: 1;
+}
+
+.cards-container.vintage-pastel .recipe-title {
+  font-size: 1.5rem;
+  color: #8B5E3C;
+  margin: 0 0 0.5rem;
+}
+
+.cards-container.vintage-pastel .recipe-stats {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #A47C48;
+  margin-bottom: 1rem;
+}
+
+.cards-container.vintage-pastel .btn-secondary {
+  color: #A47C48;
+  border: 2px solid #F2E2CD;
+  background: transparent;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.75rem;
+  margin-top: auto;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.cards-container.vintage-pastel .btn-secondary:hover {
+  background-color: #F2E2CD;
+  color: #8B5E3C;
+}
+
+/* Card Design: Retro Cardboard */
+.cards-container.retro-cardboard .recipe-card {
+  background: #e8e0d2; /* Cardboard base color */
+  border-radius: 0;
+  border: none;
+  box-shadow: 2px 2px 0 #333, 4px 4px 0 #555;
+  font-family: 'Courier New', monospace;
+  position: relative;
+  overflow: visible;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  transform: rotate(-1deg);
+}
+
+/* Add cardboard texture overlay */
+.cards-container.retro-cardboard .recipe-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23aa9980' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Image container with faded edges */
+.cards-container.retro-cardboard .card-image {
+  position: relative;
+  margin: 16px 16px 0;
+  border-radius: 0;
+  overflow: hidden;
+  border: 4px solid #fff;
+  box-shadow: 0 0 0 1px #333;
+  z-index: 1;
+}
+
+/* Style the image */
+.cards-container.retro-cardboard .card-image img {
+  filter: sepia(30%) contrast(1.1);
+  transition: all 0.3s ease;
+}
+
+.cards-container.retro-cardboard .card-image:hover img {
+  filter: sepia(0%) contrast(1.2);
+}
+
+/* Cuisine badge styled as a retro stamp */
+.cards-container.retro-cardboard .cuisine-badge {
+  background: #cc5544;
+  color: #fff;
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  border-radius: 0;
+  transform: rotate(5deg);
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  box-shadow: 1px 1px 0 #333;
+  letter-spacing: 1px;
+  z-index: 2;
+}
+
+/* Recipe title with retro typography */
+.cards-container.retro-cardboard .recipe-title {
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-size: 1.6rem;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-bottom: 12px;
+  padding: 0 16px;
+  position: relative;
+  z-index: 2;
+  text-shadow: 1px 1px 0 #fff;
+  border-bottom: 2px dashed #aa9980;
+}
+
+/* Content area */
+.cards-container.retro-cardboard .card-content {
+  padding: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Recipe stats with retro icons */
+.cards-container.retro-cardboard .recipe-stats {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-family: 'Courier New', monospace;
+}
+
+.cards-container.retro-cardboard .stat-item {
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+  background: #fff;
+  padding: 2px 8px;
+  border: 1px solid #aa9980;
+}
+
+.cards-container.retro-cardboard .stat-item svg {
+  color: #cc5544;
+}
+
+/* Ingredients list */
+.cards-container.retro-cardboard .ingredients-preview {
+  background: #fff;
+  border: 1px solid #aa9980;
+  padding: 12px;
+  margin: 0 12px 12px;
+  list-style-type: none;
+  font-family: 'Courier New', monospace;
+  position: relative;
+}
+
+.cards-container.retro-cardboard .ingredients-preview::before {
+  content: "INGREDIENTS";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #e8e0d2;
+  padding: 0 8px;
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-size: 0.8rem;
+  color: #333;
+}
+
+.cards-container.retro-cardboard .ingredients-preview h3 {
+  display: none;
+}
+
+.cards-container.retro-cardboard .ingredients-preview li {
+  position: relative;
+  padding-left: 16px;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.cards-container.retro-cardboard .ingredients-preview li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  display: inline-block !important;
+  color: #cc5544;
+  font-weight: bold;
+}
+
+/* Button styles */
+.cards-container.retro-cardboard .btn-primary,
+.cards-container.retro-cardboard .btn-secondary {
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: 0;
+  transition: all 0.2s ease;
+  position: relative;
+  text-align: center;
+  display: inline-block;
+  margin: 0 6px 12px;
+}
+
+.cards-container.retro-cardboard .btn-primary {
+  background: #cc5544;
+  color: #fff;
+  border: 2px solid #cc5544;
+  box-shadow: 2px 2px 0 #333;
+}
+
+.cards-container.retro-cardboard .btn-primary:hover {
+  background: #aa3322;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #333;
+}
+
+.cards-container.retro-cardboard .btn-secondary {
+  background: #fff;
+  color: #333;
+  border: 2px solid #333;
+  box-shadow: 2px 2px 0 #aa9980;
+}
+
+.cards-container.retro-cardboard .btn-secondary:hover {
+  background: #f5f5f5;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #aa9980;
+}
+
+/* Optional: Faded corners effect */
+.cards-container.retro-cardboard .recipe-card::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: #333;
+  bottom: -4px;
+  right: -4px;
+  border-radius: 0 0 6px 0;
+  z-index: -1;
+  opacity: 0.1;
+}
+
+/* Add font declarations for the retro style */
+.cards-container.retro-cardboard .recipe-title,
+.cards-container.retro-cardboard .cuisine-badge,
+.cards-container.retro-cardboard .btn-primary,
+.cards-container.retro-cardboard .btn-secondary,
+.cards-container.retro-cardboard .ingredients-preview::before {
+  font-family: var(--font-vintage), 'Impact', 'Arial Black', sans-serif;
+}
+
+.cards-container.retro-cardboard .card-content,
+.cards-container.retro-cardboard .ingredients-preview,
+.cards-container.retro-cardboard .stat-item {
+  font-family: var(--font-vintage), 'Courier New', monospace;
+}
+
+/* Card Design: Premium Glass */
+.cards-container.premium-glass .recipe-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.cards-container.premium-glass .recipe-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.cards-container.premium-glass .recipe-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.cards-container.premium-glass .card-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px 16px 0 0;
+}
+.cards-container.premium-glass .card-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  z-index: 1;
+}
+.cards-container.premium-glass .card-image img {
+  transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+  filter: saturate(1.2);
+}
+.cards-container.premium-glass .recipe-card:hover .card-image img {
+  transform: scale(1.05);
+}
+.cards-container.premium-glass .cuisine-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 20px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 2;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.cards-container.premium-glass .card-content {
+  padding: 24px;
+  position: relative;
+  z-index: 2;
+}
+.cards-container.premium-glass .recipe-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 16px;
+  position: relative;
+  padding-bottom: 16px;
+}
+.cards-container.premium-glass .recipe-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  border-radius: 3px;
+}
+.cards-container.premium-glass .recipe-stats {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+.cards-container.premium-glass .stat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #555;
+}
+.cards-container.premium-glass .stat-item svg {
+  color: #6366f1;
+}
+.cards-container.premium-glass .ingredients-preview {
+  background: rgba(99, 102, 241, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  list-style-type: none;
+}
+.cards-container.premium-glass .ingredients-preview h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6366f1;
+  margin-bottom: 12px;
+}
+.cards-container.premium-glass .ingredients-preview li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 8px;
+  font-size: 0.875rem;
+  color: #444;
+}
+.cards-container.premium-glass .ingredients-preview li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  border-radius: 50%;
+  display: block !important;
+}
+.cards-container.premium-glass .btn-primary,
+.cards-container.premium-glass .btn-secondary {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 10px 18px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  text-align: center;
+  display: inline-block;
+}
+.cards-container.premium-glass .btn-primary {
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+.cards-container.premium-glass .btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #a855f7, #6366f1);
+  transition: all 0.4s ease;
+  z-index: -1;
+}
+.cards-container.premium-glass .btn-primary:hover::before {
+  left: 0;
+}
+.cards-container.premium-glass .btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+.cards-container.premium-glass .btn-secondary {
+  background: rgba(255, 255, 255, 0.8);
+  color: #6366f1;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  backdrop-filter: blur(5px);
+}
+.cards-container.premium-glass .btn-secondary:hover {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: #6366f1;
+}
+.cards-container.premium-glass .recipe-title,
+.cards-container.premium-glass .card-content,
+.cards-container.premium-glass .ingredients-preview,
+.cards-container.premium-glass .stat-item,
+.cards-container.premium-glass .btn-primary,
+.cards-container.premium-glass .btn-secondary,
+.cards-container.premium-glass .cuisine-badge {
+  font-family: var(--font-primary), 'Poppins', sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  .cards-container.premium-glass .recipe-card {
+    background: rgba(30, 30, 35, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  .cards-container.premium-glass .recipe-title {
+    color: #f5f5f5;
+  }
+  .cards-container.premium-glass .stat-item {
+    color: #ccc;
+  }
+  .cards-container.premium-glass .ingredients-preview {
+    background: rgba(99, 102, 241, 0.1);
+  }
+  .cards-container.premium-glass .ingredients-preview li {
+    color: #ddd;
+  }
+  .cards-container.premium-glass .btn-secondary {
+    background: rgba(40, 40, 50, 0.8);
+    color: #a5b4fc;
+    border-color: rgba(165, 180, 252, 0.3);
+  }
+  .cards-container.premium-glass .btn-secondary:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: #a5b4fc;
+  }
+}
+
+/* Card Design: Classic Serif */
+.cards-container.classic-serif .recipe-card {
+  background: #fff;
+  border-radius: 4px;
+  border: 1px solid #d2d2d2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: 'Merriweather', Georgia, serif;
+  overflow: hidden;
+  position: relative;
+  transition: box-shadow 0.3s ease;
+}
+.cards-container.classic-serif .recipe-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+.cards-container.classic-serif .card-image {
+  position: relative;
+  overflow: hidden;
+}
+.cards-container.classic-serif .card-image::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  z-index: 1;
+  pointer-events: none;
+}
+.cards-container.classic-serif .card-image img {
+  transition: transform 0.4s ease;
+}
+.cards-container.classic-serif .recipe-card:hover .card-image img {
+  transform: scale(1.03);
+}
+.cards-container.classic-serif .cuisine-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #3e4a61;
+  color: #fff;
+  font-family: 'Merriweather', Georgia, serif;
+  font-size: 0.7rem;
+  font-style: italic;
+  padding: 4px 12px;
+  border-radius: 2px;
+  z-index: 2;
+  letter-spacing: 0.5px;
+}
+.cards-container.classic-serif .card-content {
+  padding: 24px;
+  position: relative;
+}
+.cards-container.classic-serif .recipe-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2c3a47;
+  margin-bottom: 14px;
+  line-height: 1.3;
+  font-family: 'Merriweather', Georgia, serif;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom:14px;
+}
+.cards-container.classic-serif .recipe-stats {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 18px;
+}
+.cards-container.classic-serif .stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #555;
+  font-family: 'Merriweather', Georgia, serif;
+}
+.cards-container.classic-serif .stat-item svg {
+  color: #3e4a61;
+}
+.cards-container.classic-serif .ingredients-preview {
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+.cards-container.classic-serif .ingredients-preview h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2c3a47;
+  margin-bottom: 12px;
+  font-family: 'Merriweather', Georgia, serif;
+  position: relative;
+  margin-left: -20px;
+}
+.cards-container.classic-serif .ingredients-preview li {
+  position: relative;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  color: #444;
+  line-height: 1.5;
+}
+.cards-container.classic-serif .ingredients-preview li::before {
+  content: "•";
+  position: absolute;
+  left: -20px;
+  color: #3e4a61;
+  display: block !important;
+}
+.cards-container.classic-serif .btn-primary,
+.cards-container.classic-serif .btn-secondary {
+  font-family: 'Merriweather', Georgia, serif;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  text-align: center;
+  display: inline-block;
+  margin-right: 8px;
+}
+.cards-container.classic-serif .btn-primary {
+  background: #3e4a61;
+  color: #fff;
+  border: 1px solid #3e4a61;
+}
+.cards-container.classic-serif .btn-primary:hover {
+  background: #2c3a47;
+}
+.cards-container.classic-serif .btn-secondary {
+  background: transparent;
+  color: #3e4a61;
+  border: 1px solid #3e4a61;
+}
+.cards-container.classic-serif .btn-secondary:hover {
+  background: rgba(62, 74, 97, 0.05);
+}
+.cards-container.classic-serif .recipe-card::after {
+  content: '';
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233e4a61' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 3C12 3 21 12 21 21'%3E%3C/path%3E%3Cpath d='M3 9C7 9 15 15 15 21'%3E%3C/path%3E%3Cpath d='M3 15C5 15 9 17 9 21'%3E%3C/path%3E%3C/svg%3E");
+  opacity: 0.6;
+  pointer-events: none;
+}
+.cards-container.classic-serif .ingredients-preview h3::first-letter {
+  font-size: 1.2em;
+  font-weight: 900;
+  color: #2c3a47;
+}
+.cards-container.classic-serif .recipe-title,
+.cards-container.classic-serif .card-content,
+.cards-container.classic-serif .ingredients-preview,
+.cards-container.classic-serif .stat-item,
+.cards-container.classic-serif .cuisine-badge {
+  font-family: var(--font-classic), 'Merriweather', Georgia, serif;
+}
+.cards-container.classic-serif .btn-primary,
+.cards-container.classic-serif .btn-secondary {
+  font-family: var(--font-classic), 'Merriweather', Georgia, serif;
+  font-weight: 400;
+}
+@media (max-width: 640px) {
+  .cards-container.classic-serif .recipe-stats {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .cards-container.classic-serif .recipe-title {
+    font-size: 1.2rem;
+  }
+}
+@media print {
+  .cards-container.classic-serif .recipe-card {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  .cards-container.classic-serif .card-image::before {
+    border: 1px solid #000;
+  }
+  .cards-container.classic-serif .btn-primary,
+  .cards-container.classic-serif .btn-secondary {
+    display: none;
+  }
+}
+
+    /* Enhanced smooth transitions */
+    .cards-container {
+      perspective: 1200px;
+      transform-style: preserve-3d;
+    }
+
+    .cards-container .recipe-card {
+      transition: 
+        transform 0.85s cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 0.85s cubic-bezier(0.2, 0.8, 0.2, 1),
+        background-color 0.5s ease;
+      will-change: transform, opacity;
+      transform-origin: center center;
+    }
+
+    /* Improved staggered animations */
+    @keyframes smoothEntrance {
+      0% {
+        opacity: 0;
+        transform: scale(0.94) translateY(40px) rotateX(6deg);
+        filter: blur(10px);
       }
-      body {
-        font-family: "Oxygen", sans-serif;
-        color: #050505;
+      30% {
+        opacity: 0.8;
+        filter: blur(4px);
+      }
+      60% {
+        transform: scale(1.02) translateY(-5px) rotateX(-2deg);
+        filter: blur(0);
+      }
+      80% {
+        transform: scale(0.98) translateY(2px) rotateX(1deg);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0) rotateX(0);
+      }
+    }
+
+    /* Smoother style switching */
+    @keyframes smoothStyleChange {
+      0% {
+        transform: scale(1) translateZ(0) rotateX(0);
+      }
+      25% {
+        transform: scale(0.96) translateZ(-50px) rotateX(4deg);
+        filter: blur(4px);
+      }
+      75% {
+        transform: scale(1.02) translateZ(20px) rotateX(-2deg);
+        filter: blur(0);
+      }
+      100% {
+        transform: scale(1) translateZ(0) rotateX(0);
+      }
+    }
+
+    /* Updated stagger delays */
+    .cards-container.animated .recipe-card:nth-child(1) { animation-delay: 0.08s; }
+    .cards-container.animated .recipe-card:nth-child(2) { animation-delay: 0.16s; }
+    .cards-container.animated .recipe-card:nth-child(3) { animation-delay: 0.24s; }
+    .cards-container.animated .recipe-card:nth-child(4) { animation-delay: 0.32s; }
+    .cards-container.animated .recipe-card:nth-child(n+5) { animation-delay: 0.4s; }
+
+    /* Smooth style switching animation */
+    .cards-container.style-transition .recipe-card {
+      animation: none;
+      transition: 
+        transform 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+        opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+        background-color 0.6s ease,
+        border 0.6s ease,
+        box-shadow 0.6s ease,
+        color 0.6s ease;
+    }
+
+    /* Base styles */
+    body {
+      font-family: var(--font-primary);
+      background-color: var(--color-background-light);
+      color: var(--color-text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Main container */
+    .main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* Cards container */
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    /* Recipe card */
+    .recipe-card {
+      background-color: var(--color-background);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition-normal);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .recipe-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-elevated);
+    }
+
+    /* Card image */
+    .card-image {
+      position: relative;
+      padding-top: 65%;
+      overflow: hidden;
+    }
+
+    .card-image img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition-normal);
+    }
+
+    .recipe-card:hover .card-image img {
+      transform: scale(1.05);
+    }
+
+    /* Cuisine badge */
+    .cuisine-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background-color: rgba(255, 107, 53, 0.9);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Card content */
+    .card-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    /* Recipe title */
+    .recipe-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin: 0 0 1rem 0;
+      line-height: 1.3;
+    }
+
+    /* Recipe stats */
+    .recipe-stats {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.875rem;
+      color: var(--color-text-light);
+    }
+
+    .stat-item svg {
+      width: 16px;
+      height: 16px;
+      color: var(--color-accent);
+    }
+
+    /* Ingredients preview */
+    .ingredients-preview {
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .ingredients-preview h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--color-text);
+    }
+
+    .ingredients-preview ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .ingredients-preview li {
+      position: relative;
+      padding-left: 1.25rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--color-text-light);
+      line-height: 1.4;
+    }
+
+    .more-ingredients {
+      color: var(--color-accent);
+      font-weight: 500;
+    }
+
+    /* Card actions */
+    .card-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: auto;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: var(--transition-fast);
+      text-decoration: none;
+      flex: 1;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-primary-dark);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .btn-secondary svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin: 3rem 0;
+    }
+
+    .pagination-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      background-color: var(--color-background);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      font-weight: 500;
+      transition: var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .pagination-btn:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .pagination-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .page-indicator {
+      font-size: 0.875rem;
+      color: var(--color-text-light);
+    }
+
+    /* Empty state & Welcome */
+    .empty-state,
+    .welcome {
+      text-align: center;
+      padding: 4rem 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .empty-state svg,
+    .welcome-icon svg {
+      color: var(--color-text-lighter);
+      margin-bottom: 1rem;
+    }
+
+    .empty-state h2,
+    .welcome h1 {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+      color: var(--color-text);
+    }
+
+    .empty-state p,
+    .welcome p {
+      color: var(--color-text-light);
+      font-size: 1.125rem;
+      line-height: 1.6;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .cards-container {
+        grid-template-columns: 1fr;
       }
 
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
+      .card-actions {
+        flex-direction: column;
       }
 
-      .main {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-      /* Card List */
-      .cards {
-        display: flex;
+      .pagination {
         flex-wrap: wrap;
-        gap: 30px; /* Increases space between cards */
-        list-style: none;
-        margin: 0 auto; /* Center align the cards */
-        padding: 0;
-        justify-content: center; /* Centers cards horizontally */
       }
-      
-      .cards_item {
-        display: flex;
-        flex: 1 1 calc(33.3333% - 30px); /* Makes cards larger and keeps a 30px gap */
-        box-sizing: border-box;
-        max-width: 400px; /* Ensures cards have a maximum width */
-      }
-      
-      @media (max-width: 768px) {
-        .cards_item {
-          flex: 1 1 calc(50% - 20px); /* Adjust for smaller screens */
-        }
-      }
-      
-      @media (max-width: 480px) {
-        .cards_item {
-          flex: 1 1 100%; /* Full-width for mobile */
-        }
-      }
-      
-      .card {
-        background-color: #fff; /* Card background color */
-        border-radius: 8px; /* Rounded corners */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow effect */
-        overflow: hidden;
-        margin: 10px auto; /* Adds vertical spacing between cards */
-        transition: transform 0.2s ease, box-shadow 0.2s ease; /* Add hover effects */
-      }
-      
-      .card:hover {
-        transform: scale(1.05); /* Slightly enlarge on hover */
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
-      }
-      
-      .card_image {
-        position: relative;
-        width: 100%;
-        height: 250px; /* Make images bigger */
-        overflow: hidden;
-        text-align: center;
-      }
-      
-      .card_image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Makes the image fill the card proportionally */
-      }
-      
-      .card_title {
-        font-size: 24px; /* Larger title text */
-        font-weight: bold;
-        margin: 16px 0;
-        text-align: center;
-      }
-      
-      .card_text  p{
-        text-align: left; 
-        padding: 10px 15px ; 
-        font-size: 16px !important; 
-        line-height: 0.6 !important;
-        color: #333 !important;
+    }
 
-      }
+    /* 
+        ======================================================================
+        Preloader (unchanged) 
+        ======================================================================
+      */
+    .preloader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #f8f9fa;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.5s ease-out;
+    }
 
-      .button-container {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 16px 16px;
-      }
-      
-      .btn {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      
-      .delete-btn {
-        background-color: #dc3545;
-        color: white;
-      }
-      
-      .btn-success {
-        background-color: #28a745;
-        color: white;
-      }
-      
-      /* Center the pagination container and add spacing from the card */
-      .pagination-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 30px; /* Add spacing between pagination and content */
-        gap: 5px; /* Minimal spacing between elements */
-      }
-      
-      /* Style each pagination button */
-      .pagination-button {
-        background-color: transparent; /* Remove background color */
-        color: #333; /* Neutral text color */
-        border: 1px solid #ddd; /* Subtle border */
-        padding: 8px 12px; /* Comfortable padding */
-        border-radius: 5px; /* Rounded corners */
-        font-size: 14px; /* Adjust font size */
-        cursor: pointer;
-        text-decoration: none;
-        transition: border-color 0.3s, color 0.3s; /* Smooth transition */
-      }
-      
-      /* Hover effect for pagination buttons */
-      .pagination-button:hover {
-        border-color: #007bff; /* Change border to blue on hover */
-        color: #007bff; /* Change text color to blue */
-      }
-      
-      /* Disabled buttons (e.g., when no previous or next page) */
-      .pagination-button:disabled {
-        color: #ccc; /* Greyed out text */
-        border-color: #ddd; /* Light grey border */
-        cursor: not-allowed; /* Indicate no interaction */
-      }
-      
-      /* Active or current page styling */
-      .page-info {
-        font-size: 16px; /* Larger text for emphasis */
-        font-weight: bold;
-        color: #333; /* Neutral text color */
-        padding: 5px 10px; /* Add padding for spacing */
-        border: 1px solid #ddd; /* Subtle border */
-        border-radius: 5px; /* Rounded corners */
-        background-color: #f8f9fa; /* Light background for contrast */
-      }
-      
-      /* Optional: Add focus styles for better accessibility */
-      .pagination-button:focus,
-      .page-info:focus {
-        outline: 2px solid #007bff;
-        outline-offset: 2px;
-      }
-      
+    .preloader-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
 
-          .card {
-          background-color: white;
-          border-radius: 0.25rem;
-          box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          width: 100%;
-          height: 100%; /* Ensure card takes the full height available */
+    .dots-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      height: 50px;
+    }
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      margin: 0 8px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #6366f1, #4f46e5);
+      box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+      animation: jumpingDot 1.2s infinite;
+    }
+
+    .dot:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    .dot:nth-child(4) {
+      animation-delay: 0.6s;
+    }
+
+    .dot:nth-child(5) {
+      animation-delay: 0.8s;
+    }
+
+    @keyframes jumpingDot {
+      0% {
+        transform: translateY(0);
       }
 
-      .card_content {
-          flex-grow: 1; /* Allow the content to grow and take available space */
-          padding: 16px 12px 32px 24px;
-          margin: 16px 8px 8px 0;
-          max-height: 290px;
-          overflow-y: auto;
+      50% {
+        transform: translateY(-25px);
       }
 
-      .button-container {
-          display: flex;
-          justify-content: space-between; /* Align buttons to the sides */
-          padding: 10px; /* Add some padding */
-          margin-top: auto; /* Pushes the button container to the bottom */
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    .preloader-progress {
+      position: relative;
+      width: 200px;
+      height: 4px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .preloader-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4f46e5, #6366f1);
+      border-radius: 4px;
+      transition: width 0.2s ease;
+    }
+
+    .loading-text {
+      margin-top: 10px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #6366f1;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    #content {
+      display: none;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
       }
 
-      .btn {
-          padding: 10px 20px;
-          font-size: 1em;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          flex: 1; /* Ensure buttons have equal width */
-          margin: 0 5px; /* Add margin between buttons */
-          text-align: center; /* Center the text within the buttons */
+      to {
+        opacity: 1;
       }
+    }
+  </style>
 
-      .delete-btn {
-          background-color: #e74c3c; /* Red color */
-          color: white;
-      }
+  <!-- Standard Django references, etc. -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet" />
+  <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
+    integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css"
+    integrity="sha256-UK1EiopXIL+KVhfbFa8xrmAWPeBjMVdvYMYkTAEv/HI=" crossorigin="anonymous" />
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
 
-      .update-btn {
-          background-color: #2ecc71; /* Green color */
-          color: white;
-      }
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/images/favicon-16x16.png' %}" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/images/favicon-32x32.png' %}" />
+  <link rel="icon" type="image/png" sizes="192x192" href="{% static 'assets/images/android-chrome-192x192.png' %}" />
+  <link rel="icon" type="image/png" sizes="512x512" href="{% static 'assets/images/android-chrome-512x512.png' %}" />
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/images/apple-touch-icon.png' %}" />
+  <link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}" />
 
-      /* Optional: Add hover effect */
-      .btn:hover {
-          opacity: 0.9;
-      }
+  <title>Recipes</title>
+</head>
 
-            /* Preloader Styles */
-               .preloader-overlay {
-                 position: fixed;
-                 top: 0;
-                 left: 0;
-                 width: 100%;
-                 height: 100%;
-                 background-color: rgba(
-                   255,
-                   255,
-                   255,
-                   0.8
-                 ); /* Semi-transparent white background */
-                 z-index: 9999; /* Ensure it's on top */
-                 display: flex;
-                 justify-content: center;
-                 align-items: center;
-               }
-
-               .preloader-container {
-                 text-align: center;
-               }
-
-               .preloader {
-                 background: #000 url(/static/temp/images/lg.gif) center
-                 border: 8px solid #f3f3f3; /* Light grey */
-                 border-top: 8px solid #3498db; /* Blue */
-                 border-radius: 50%;
-                 width: 50px;
-                 height: 50px;
-                 animation: spin 1s linear infinite; /* Spin animation */
-               }
-
-               /* Spin Animation */
-               @keyframes spin {
-                 0% {
-                   transform: rotate(0deg);
-                 }
-                 100% {
-                   transform: rotate(360deg);
-                 }
-               }
-
-               /* Hide content when preloader is active */
-               #content {
-                 display: none;
-               }
-
-    </style>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'css/bootstrap.css' %}"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap"
-      rel="stylesheet"
-    />
-    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
-      integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4="
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css"
-      integrity="sha256-UK1EiopXIL+KVhfbFa8xrmAWPeBjMVdvYMYkTAEv/HI="
-      crossorigin="anonymous"
-    />
-    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
-    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
-
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Recipes</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'css/bootstrap.css' %}"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap"
-      rel="stylesheet"
-    />
-    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
-      integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4="
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css"
-      integrity="sha256-UK1EiopXIL+KVhfbFa8xrmAWPeBjMVdvYMYkTAEv/HI="
-      crossorigin="anonymous"
-    />
-    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
-    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
-
-    <!-- Favicon -->
-<link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/images/favicon-16x16.png' %}">
-<link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/images/favicon-32x32.png' %}">
-<link rel="icon" type="image/png" sizes="192x192" href="{% static 'assets/images/android-chrome-192x192.png' %}">
-<link rel="icon" type="image/png" sizes="512x512" href="{% static 'assets/images/android-chrome-512x512.png' %}">
-
-<!-- Apple Touch Icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/images/apple-touch-icon.png' %}">
-
-<!-- Web Manifest -->
-<link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}">
-
-  </head>
-
-  <body>
-  <!-- Preloader -->
-  <div class="preloader-overlay">
+<body>
+  <!-- Preloader (Unchanged) -->
+  <div class="preloader-overlay" id="preloader">
     <div class="preloader-container">
-      <div class="preloader"></div>
+      <div class="dots-container">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="preloader-progress">
+        <div class="preloader-bar" id="progress-bar"></div>
+      </div>
+      <div class="loading-text" id="loading-text">Loading...</div>
     </div>
   </div>
 
@@ -382,15 +1845,22 @@
       <header class="header_section">
         <div class="container-fluid">
           <nav class="navbar navbar-expand-lg custom_nav-container">
-            <a class="navbar-brand" href= {% url "home" %}>                <span>Recipe Box</span>
+            <a class="navbar-brand" href="{% url 'home' %}">
+              <span>Recipe Box</span>
             </a>
             <div id="">
               <div class="User_option">
                 {% if user.is_authenticated %}
-                  <a href="{% url 'user_pro' %}"><i class="fa fa-user" aria-hidden="true"></i><span>  Saved Recipes</span></a>
-                  <a href="{% url 'logout_page' %}"><i class="fa fa-user" aria-hidden="true"></i><span>  Logout</span></a>
+                <a href="{% url 'user_pro' %}">
+                  <i class="fa fa-user" aria-hidden="true"></i><span> Saved Recipes</span>
+                </a>
+                <a href="{% url 'logout_page' %}">
+                  <i class="fa fa-user" aria-hidden="true"></i><span> Logout</span>
+                </a>
                 {% else %}
-                  <a href="{% url 'login_page' %}"><i class="fa fa-user" aria-hidden="true"></i><span>  Login</span></a>
+                <a href="{% url 'login_page' %}">
+                  <i class="fa fa-user" aria-hidden="true"></i><span> Login</span>
+                </a>
                 {% endif %}
                 <a href="/recipe/home/"><span>Home</span></a>
               </div>
@@ -399,6 +1869,7 @@
         </div>
       </header>
 
+      <!-- Intro Slider Section -->
       <section class="slider_section">
         <div class="container">
           <div class="row">
@@ -414,7 +1885,8 @@
                       <form method="GET" action="{% url 'explore_recipes' %}">
                         <div class="form-row">
                           <div class="form-group col-lg-5">
-                            <input type="text" class="form-control" id="inputHotel" name="Search" placeholder="Search Recipes by Name" />
+                            <input type="text" class="form-control" id="inputHotel" name="Search"
+                              placeholder="Search Recipes by Name" />
                           </div>
                           <div class="form-group col-lg-3">
                             <div class="btn-box">
@@ -423,145 +1895,50 @@
                           </div>
                         </div>
                       </form>
-                    </div>
-                  </div>
-                </div>
+                    </div><!-- /col -->
+                  </div><!-- /row -->
+                </div><!-- /container -->
               </div>
             </div>
           </div>
         </div>
 
         <div class="slider_container">
+          <!-- Example slider images -->
           <div class="item">
-            <div class="img-box">
-              <img src="/static/images/slider-img1.png" alt="" />
-            </div>
+            <div class="img-box"><img src="/static/images/slider-img1.png" alt="" /></div>
           </div>
           <div class="item">
-            <div class="img-box">
-              <img src="/static/images/slider-img2.png" alt="" />
-            </div>
+            <div class="img-box"><img src="/static/images/slider-img2.png" alt="" /></div>
           </div>
           <div class="item">
-            <div class="img-box">
-              <img src="/static/images/slider-img3.png" alt="" />
-            </div>
+            <div class="img-box"><img src="/static/images/slider-img3.png" alt="" /></div>
           </div>
           <div class="item">
-            <div class="img-box">
-              <img src="/static/images/slider-img4.png" alt="" />
-            </div>
-          </div>
-          <div class="item">
-            <div class="img-box">
-              <img src="/static/images/slider-img1.png" alt="" />
-            </div>
-          </div>
-          <div class="item">
-            <div class="img-box">
-              <img src="/static/images/slider-img2.png" alt="" />
-            </div>
-          </div>
-          <div class="item">
-            <div class="img-box">
-              <img src="/static/images/slider-img3.png" alt="" />
-            </div>
-          </div>
-          <div class="item">
-            <div class="img-box">
-              <img src="/static/images/slider-img4.png" alt="" />
-            </div>
+            <div class="img-box"><img src="/static/images/slider-img4.png" alt="" /></div>
           </div>
         </div>
       </section>
     </div>
 
-    <div class="main">
-      {% if search_performed %}
-        <ul class="cards">
-          {% for hit in recipes %}
-          <li class="cards_item">
-            <div class="card">
-              <div class="card_image"><img src="{{ hit.recipe.image }}" alt="Recipe Image" /></div>
-              <h2 class="card_title">{{ hit.recipe.label }}</h2>
-              <div class="card_content">
-                <div class="card_text">
-                  <p>Meal: {{ hit.recipe.mealType|join:", " }}</p>
-                  <p>Cuisine: {{ hit.recipe.cuisineType|join:", " }}</p>
-                  <p>Type: {% if hit.recipe.dishType %}{{ hit.recipe.dishType|join:", " }}{% else %}N/A{% endif %}</p>
-                  <p>Source: {{ hit.recipe.source }}</p>
-                </div>
-              </div>
-             
-              <div class="button-container">
-                <a href="{{ hit.recipe.url }}"><button type="button" class="btn update-btn btn-success">Go to Recipe</button></a>
-                <form method="POST" action="{% url 'save_user_recipe' %}">
-                  {% csrf_token %}
-                  <input type="hidden" name="recipe_label" value="{{ hit.recipe.label }}">
-                  <input type="hidden" name="recipe_url" value="{{ hit.recipe.url }}">
-                  <input type="hidden" name="recipe_image" value="{{ hit.recipe.image }}">
-                  <input type="hidden" name="meal_type" value="{{ hit.recipe.mealType|join:", " }}">
-                  <input type="hidden" name="cuisine_type" value="{{ hit.recipe.cuisineType|join:", " }}">
-                  <input type="hidden" name="dish_type" value="{% if hit.recipe.dishType %}{{ hit.recipe.dishType|join:", " }}{% else %}N/A{% endif %}">
-                  <input type="hidden" name="source" value="{{ hit.recipe.source }}">
-                  
-                  {% if user.is_authenticated %}
-                  <button type="submit" class="btn update-btn btn-success">Save</button>
-                  {% else %}
-                  <button type="button" class="btn update-btn btn-success" onclick="promptLogin()">Save</button>
-                  {% endif %}
-                </form>
-              </div>
-            </div>
-          </li>
-          {% endfor %}
-        </ul>
-        
-        <div class="recipe-list">
-          {% if not recipes %}
-            <div style="display: flex; justify-content: center; align-items: center; height: 60vh; text-align: center;">
-              <p style="font-size: 1.5em; color: #666; background-color: #f9f9f9; padding: 20px 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                No recipes found from Global sources.                 
-              </p>
-            </div>
-          {% endif %}
-        </div>
-    
-        {% if recipes %}
-        <div class="pagination-container">
-          {% if start > 0 %}
-          <form method="GET" action="" class="pagination-form">
-            <input type="hidden" name="Search" value="{{ recipe_name }}" />
-            <input type="hidden" name="start" value="{{ prev_start }}" />
-            <button type="submit" class="pagination-button">Previous</button>
-          </form>
-          {% endif %}
-          
-          <span class="page-info">Page {{ current_page }} of {{ total_pages }}</span>
-          
-          {% if has_more %}
-          <form method="GET" action="" class="pagination-form">
-            <input type="hidden" name="Search" value="{{ recipe_name }}" />
-            <input type="hidden" name="start" value="{{ next_start }}" />
-            <button type="submit" class="pagination-button">Next</button>
-          </form>
-          {% endif %}
-        </div>
-        {% endif %}
-      
-      {% else %}
-        <!-- Display a welcome message if no search has been performed -->
-        <div style="display: flex; justify-content: center; align-items: center; height: 60vh; text-align: center;">
-          <p style="font-size: 1.5em; color: #666; background-color: #f9f9f9; padding: 20px 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-            Welcome to the Recipe Box! Start by searching for a recipe using the search bar above.
-          </p>
-        </div>
-      {% endif %}
+    <!-- Style changer -->
+    <div class="style-controls">
+      <button id="switchCardDesignBtn" class="style-btn">Switch Card Design</button>
+      <span id="currentStyle">Design: Classic</span>
     </div>
-    
+
+    <!-- Main recipe list area -->
+    <div class="main">
+      <div id="data-container">
+        <!-- Existing content wrapped in this div -->
+        {% include 'recipe/recipe_results.html' %}
+      </div>
+    </div>
 
 
-  
+
+
+    <!-- About section -->
     <section class="about_section layout_padding">
       <div class="container">
         <div class="col-md-11 col-lg-10 mx-auto">
@@ -571,11 +1948,7 @@
           <div class="box">
             <div class="col-md-7 mx-auto">
               <div class="img-box">
-                <img
-                  src="{% static 'images/about-img.jpg' %}"
-                  class="box-img"
-                  alt="About Us"
-                />
+                <img src="{% static 'images/about-img.jpg' %}" class="box-img" alt="About Us" />
               </div>
             </div>
             <div class="detail-box">
@@ -588,7 +1961,7 @@
                 just starting out in the kitchen, you'll find something
                 delicious to try on our site.
               </p>
-              <a href="{% url "explore_recipes" %}">
+              <a href="{% url 'explore_recipes' %}">
                 <i class="fa fa-arrow-right" aria-hidden="true"></i>
               </a>
             </div>
@@ -597,66 +1970,193 @@
       </div>
     </section>
 
+    <!-- Footer -->
     <div class="footer_container">
       <section class="info_section">
         <div class="container">
           <div class="social_box">
+            <a href="https://www.instagram.com/roshan_ramani01?igsh=MWlpNWI2MWZmMDB6Yg%3D%3D&utm_source=qr">
+              <i class="fa fa-instagram" aria-hidden="true"></i>
+            </a>
             <a
-              href="https://www.instagram.com/roshan_ramani01?igsh=MWlpNWI2MWZmMDB6Yg%3D%3D&utm_source=qr"
-            >
-            <i class="fa fa-instagram" aria-hidden="true"></i>
-          </a>
-        
-            <a
-              href="https://www.linkedin.com/in/roshan-ramani-0510102b2?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
-            >
+              href="https://www.linkedin.com/in/roshan-ramani-0510102b2?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app">
               <i class="fa fa-linkedin" aria-hidden="true"></i>
             </a>
           </div>
         </div>
       </section>
-
       <footer class="footer_section">
-        <div class="container">
-          <p>
-            Created By: <strong>Roshan Ramani</strong>
-            <br />
-            <span id="displayYear"></span>
-          </p>
-        </div>
-      </footer>
-    </div>
-  </div>
+  <!-- JS: Preloader logic (unchanged) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Simulate loading process
+      const progressBar = document.getElementById("progress-bar");
+      const loadingText = document.getElementById("loading-text");
+      let width = 0;
+      const loadingInterval = setInterval(function () {
+        if (width >= 100) {
+          clearInterval(loadingInterval);
+          loadingText.textContent = "Ready!";
 
-
-
-    
-  </body>
-      <script>
-        document.addEventListener("DOMContentLoaded", function () {
+          // Fade out preloader
+          const preloader = document.getElementById("preloader");
           setTimeout(function () {
-            document.querySelector(".preloader-overlay").style.display = "none";
-            document.getElementById("content").style.display = "block";
-          }, 1000);
-        });
-      </script>
-                   
-      <script>
-        function promptLogin()     {
-            if (confirm("Please log in to save your recipe. Would you like to log in now?")) {
-                window.location.href = "{% url 'login_page' %}";  // Redirects to login page
-            }
+            preloader.style.opacity = "0";
+            // Show content after preloader fades
+            setTimeout(function () {
+              preloader.style.display = "none";
+              document.getElementById("content").style.display = "block";
+            }, 500);
+          }, 400);
+        } else {
+          width += 1;
+          progressBar.style.width = width + "%";
+
+          // Update loading text at certain percentages
+          if (width === 25) {
+            loadingText.textContent = "Loading assets...";
+          } else if (width === 50) {
+            loadingText.textContent = "Preparing content...";
+          } else if (width === 75) {
+            loadingText.textContent = "Almost there...";
+          }
         }
-    </script>
+      }, 30);
+    });
+  </script>
+
+  <!-- JS: Prompt login if user not authenticated -->
+  <script>
+    function promptLogin() {
+      if (confirm("Please log in to save your recipe. Would you like to log in now?")) {
+        window.location.href = "{% url 'login_page' %}";
+      }
+    }
+  </script>
+
+  <!-- JS: "Change Style" logic - cycles through style classes -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const designs = [
+        { name: 'Classic', class: 'classic-style' },
+        { name: 'Journal', class: 'recipe-journal' },
+        { name: 'Elegant', class: 'elegant-style' },
+        { name: 'Modern‑Edge', class: 'modern-edge' },
+        { name: 'Vintage‑Pastel', class: 'vintage-pastel' },
+        { name: 'Retro Cardboard', class: 'retro-cardboard' },
+        { name: 'Premium Glass', class: 'premium-glass' },
+        { name: 'Classic Serif', class: 'classic-serif' }
+      ];
+      const switchBtn = document.getElementById('switchCardDesignBtn');
+      const currentStyleText = document.getElementById('currentStyle');
+      // Always get the latest .cards-container after AJAX
+      function getCardsContainer() {
+        return document.querySelector('.cards-container');
+      }
+      let currentIndex = parseInt(localStorage.getItem('selectedCardDesignIndex')) || 0;
+
+      function animateCardsIn() {
+        const cardsContainer = getCardsContainer();
+        if (!cardsContainer) return;
+        // Remove then add .animated to trigger animation
+        cardsContainer.classList.remove('animated');
+        // Force reflow
+        void cardsContainer.offsetWidth;
+        cardsContainer.classList.add('animated');
+      }
+
+      function applyDesign() {
+        const cardsContainer = getCardsContainer();
+        if (!cardsContainer) return;
+        designs.forEach(d => cardsContainer.classList.remove(d.class));
+        cardsContainer.classList.add(designs[currentIndex].class);
+        currentStyleText.textContent = 'Design: ' + designs[currentIndex].name;
+        animateCardsIn();
+      }
+      // Expose for AJAX callback
+      window.applyCardDesignAfterAjax = applyDesign;
+      applyDesign();
+
+      switchBtn.addEventListener('click', function () {
+        const cardsContainer = getCardsContainer();
+        if (!cardsContainer) return;
+        cardsContainer.classList.remove('style-transition', 'animated');
+        designs.forEach(d => cardsContainer.classList.remove(d.class));
+        currentIndex = (currentIndex + 1) % designs.length;
+        localStorage.setItem('selectedCardDesignIndex', currentIndex.toString());
+        cardsContainer.classList.add(designs[currentIndex].class, 'style-transition');
+        currentStyleText.textContent = 'Design: ' + designs[currentIndex].name;
+        setTimeout(() => {
+          cardsContainer.classList.remove('style-transition');
+          animateCardsIn();
+        }, 350);
+      });
+
+      // Optional: Keyboard navigation
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') {
+          switchBtn.click();
+        } else if (e.key === 'ArrowLeft') {
+          const cardsContainer = getCardsContainer();
+          if (!cardsContainer) return;
+          cardsContainer.classList.remove('style-transition', 'animated');
+          designs.forEach(d => cardsContainer.classList.remove(d.class));
+          currentIndex = (currentIndex - 1 + designs.length) % designs.length;
+          localStorage.setItem('selectedCardDesignIndex', currentIndex.toString());
+          cardsContainer.classList.add(designs[currentIndex].class, 'style-transition');
+          currentStyleText.textContent = 'Design: ' + designs[currentIndex].name;
+          setTimeout(() => {
+            cardsContainer.classList.remove('style-transition');
+            animateCardsIn();
+          }, 350);
+        }
+      });
+    });
+  </script>
+
+<script>
+  function loadPage(page) {
+      const container = document.getElementById('data-container');
+      const searchQuery = "{{ recipe_name|escapejs }}";
+      
+      container.classList.add('loading');
+      
+      fetch(`?Search=${encodeURIComponent(searchQuery)}&page=${page}`, {
+          headers: {'X-Requested-With': 'XMLHttpRequest'}
+      })
+      .then(response => response.text())
+      .then(html => {
+          container.innerHTML = html;
+          history.pushState({ page }, '', `?Search=${searchQuery}&page=${page}`);
+      })
+      .finally(() => container.classList.remove('loading'));
+  }
   
-      <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
-      <script src="{% static 'js/bootstrap.js' %}"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.js"></script>
-      <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"
-        integrity="sha256-Zr3vByTlMGQhvMfgkQ5BtWRSKBGa2QlspKYJnkjZTmo="
-        crossorigin="anonymous"
-      ></script>
-      <script src="{% static 'js/custom.js' %}"></script>
-  </html>
+  document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.pagination-btn');
+      if (btn) {
+          e.preventDefault();
+          loadPage(parseInt(btn.dataset.page));
+      }
+  });
   
+  window.addEventListener('popstate', (event) => {
+      if (event.state?.page) {
+          loadPage(event.state.page);
+      }
+  });
+  </script>
+
+  <!-- jQuery, Bootstrap, etc. -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"
+    integrity="sha256-Zr3vByTlMGQhvMfgkQ5BtWRSKBGa2QlspKYJnkjZTmo=" crossorigin="anonymous"></script>
+  <script src="{% static 'js/custom.js' %}"></script>
+</body>
+
+
+
+</html>
+`

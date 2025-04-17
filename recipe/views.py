@@ -133,7 +133,7 @@ def login_page(request):
         user = authenticate(username=username, password=password)
         if user:
             login(request, user)
-            return redirect("/recipe/home/")
+            return redirect("/recipe/explore_recipes/")
         else:
             messages.error(request, "Invalid credentials.")
             return redirect("/recipe/login_page/")
@@ -193,41 +193,68 @@ def delete_profile(request):
 
 def explore_recipes(request):
     recipe_name = request.GET.get('Search', '').strip()
-    start = int(request.GET.get('start', 0))
+    api_start = int(request.GET.get('api_start', 0))
+    page = int(request.GET.get('page', 1))
     page_size = 3
+    
+    # Calculate client-side paging
+    recipes_buffer = request.session.get('recipes_buffer', [])
+    total_recipes = request.session.get('total_recipes', 0)
+    
+    # Check if we need new data from API
+    if recipe_name and (
+        recipe_name != request.session.get('current_search', '') or 
+        not recipes_buffer or 
+        (page_size * (page - 1)) >= len(recipes_buffer)
+    ):
+        all_recipes, has_more, total_count = fetch_recipes(recipe_name, api_start)
+        
+        # Store in session
+        request.session['recipes_buffer'] = all_recipes
+        request.session['current_search'] = recipe_name
+        request.session['total_recipes'] = total_count
+        recipes_buffer = all_recipes
+        total_recipes = total_count
+    
+    # Calculate pagination details
+    start_idx = (page - 1) * page_size
+    end_idx = start_idx + page_size
+    current_page_recipes = recipes_buffer[start_idx:end_idx] if recipes_buffer else []
+    
+    # Calculate if we need more data from API for next page
+    need_more_data = len(recipes_buffer) <= end_idx and total_recipes > len(recipes_buffer)
+    
+    # Calculate pagination controls
+    total_pages = (total_recipes // page_size) + (1 if total_recipes % page_size > 0 else 0)
+    has_next = page < total_pages
+    has_prev = page > 1
+    next_page = page + 1 if has_next else page
+    prev_page = page - 1 if has_prev else page
+    
+    # Calculate API pagination
+    next_api_start = api_start + len(recipes_buffer) if need_more_data else api_start
 
-    recipes, has_more, total_recipes = [], False, 0  # Default values for no search
-    next_start, prev_start, last_start = 0, 0, 0
-    current_page, total_pages = 1, 1
-    show_first_page, show_last_page = False, False
+    # Determine template based on AJAX request
+    template = 'recipe/explore_recipes.html'
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        template = 'recipe/recipe_results.html'
 
-    if recipe_name:
-        # Fetch recipes only if there is a search term
-        recipes, has_more, total_recipes = fetch_recipes(recipe_name, start, page_size)
-        next_start = start + page_size
-        prev_start = max(start - page_size, 0)
-        last_start = (total_recipes // page_size) * page_size
-
-        current_page = (start // page_size) + 1
-        total_pages = (total_recipes // page_size) + (1 if total_recipes % page_size > 0 else 0)
-        show_first_page = start > 0
-        show_last_page = (start + page_size) < total_recipes
-
-    return render(request, 'recipe/explore_recipes.html', {
-        'recipes': recipes,
-        'has_more': has_more,
+    return render(request, template, {
+        'recipes': current_page_recipes,
         'recipe_name': recipe_name,
-        'next_start': next_start,
-        'prev_start': prev_start,
-        'last_start': last_start,
-        'start': start,
-        'total_recipes': total_recipes,
-        'current_page': current_page,
+        'page': page,
+        'next_page': next_page,
+        'prev_page': prev_page,
+        'has_next': has_next,
+        'has_prev': has_prev,
         'total_pages': total_pages,
-        'show_first_page': show_first_page,
-        'show_last_page': show_last_page,
-        'search_performed': bool(recipe_name),  # Indicates if a search was performed
+        'total_recipes': total_recipes,
+        'api_start': api_start,
+        'next_api_start': next_api_start,
+        'need_more_data': need_more_data,
+        'search_performed': bool(recipe_name),
     })
+
 
 # User-specific saved recipes
 

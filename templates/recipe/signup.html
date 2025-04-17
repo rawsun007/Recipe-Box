@@ -1,102 +1,237 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Recipe Community - Sign Up</title>
 
-      .toggle-password {
-        cursor: pointer;
-        color: #888;
-        font-size: 1.2em;
+    <link rel="stylesheet" href="/static/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+      :root {
+        --primary: #6366f1;
+        --primary-hover: #4f46e5;
+        --background: #f8fafc;
+        --card-bg: #ffffff;
+      }
+
+      body {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
         display: flex;
         align-items: center;
-    }
-
-    .toggle-password:hover {
-        color: #555;
-    }
-    /* Preloader Styles */
-    .preloader-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(
-        255,
-        255,
-        255,
-        0.8
-      ); /* Semi-transparent white background */
-      z-index: 9999; /* Ensure it's on top */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .preloader-container {
-      text-align: center;
-    }
-
-    .preloader {
-      background: #000 url(/static/assets/images/lg.gif) center
-      border: 8px solid #f3f3f3; /* Light grey */
-      border-top: 8px solid #3498db; /* Blue */
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite; /* Spin animation */
-    }
-
-    /* Spin Animation */
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
+        justify-content: center;
+        margin: 0;
+        font-family: 'Segoe UI', system-ui, sans-serif;
       }
-      100% {
-        transform: rotate(360deg);
+
+      .auth-container {
+        max-width: 1000px;
+        margin: 2rem auto;
+        background: var(--card-bg);
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
       }
-    }
 
-    /* Hide content when preloader is active */
-    #content {
-      display: none;
-    }
+      .welcome-section {
+        background: var(--primary);
+        padding: 4rem 2rem;
+        color: white;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
 
-      .container {
+      .form-section {
+        padding: 4rem 3rem;
+      }
+
+      .auth-heading {
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: #1e293b;
+      }
+
+      .form-control {
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      }
+
+      /* Container for password input and toggle icon */
+      .password-container {
+        position: relative;
+      }
+
+      .password-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #94a3b8;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        border: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-hover);
+        transform: translateY(-1px);
+      }
+
+      .alert {
+        border-radius: 0.75rem;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .link-secondary {
+        color: #64748b;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .link-secondary:hover {
+        color: var(--primary);
+      }
+
+      @media (max-width: 768px) {
+        .auth-container {
+          margin: 1rem;
+        }
+        
+        .welcome-section {
+          padding: 2rem 1rem;
+        }
+        
+        .form-section {
+          padding: 2rem 1.5rem;
+        }
+      }
+
+      .preloader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #f8fafc;
+        z-index: 9999;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100%;
+        transition: opacity 0.5s ease-out;
       }
-      body {
-        background-image: url("{% static 'assets/images/bg3.jpg' %}");
-        background-size: cover; /* Make sure the image covers the entire background */
-        background-repeat: no-repeat; /* Prevent the image from repeating */
-        background-position: center center; /* Center the image */
-        height: 100vh; /* Ensure the body takes up the full height of the viewport */
-        margin: 0; /* Remove default margin */
+
+      .preloader-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .dots-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        height: 50px;
+      }
+
+      .dot {
+        width: 16px;
+        height: 16px;
+        margin: 0 8px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #6366f1, #4f46e5);
+        box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+        animation: jumpingDot 1.2s infinite;
+      }
+
+      .dot:nth-child(1) {
+        animation-delay: 0s;
+      }
+      
+      .dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      
+      .dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      
+      .dot:nth-child(4) {
+        animation-delay: 0.6s;
+      }
+      
+      .dot:nth-child(5) {
+        animation-delay: 0.8s;
+      }
+
+      @keyframes jumpingDot {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-25px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      .preloader-progress {
+        position: relative;
+        width: 200px;
+        height: 4px;
+        background: #e5e7eb;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .preloader-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #4f46e5, #6366f1);
+        border-radius: 4px;
+        transition: width 0.2s ease;
+      }
+
+      .loading-text {
+        margin-top: 10px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        color: #6366f1;
+        font-weight: 500;
+        letter-spacing: 1px;
+      }
+
+      #content {
+        display: none;
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
       }
     </style>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <title>User sign up</title>
-
-    <link rel="stylesheet" href="/static/assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/static/assets/css/fontawsom-all.min.css" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="/static/assets/css/style.css"
-    />
-
-
-    <!-- Favicon -->
 <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/images/favicon-16x16.png' %}">
 <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/images/favicon-32x32.png' %}">
 <link rel="icon" type="image/png" sizes="192x192" href="{% static 'assets/images/android-chrome-192x192.png' %}">
@@ -107,160 +242,184 @@
 
 <!-- Web Manifest -->
 <link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}">
-
-
   </head>
 
   <body>
-    <div class="preloader-overlay">
+    <div class="preloader-overlay" id="preloader">
       <div class="preloader-container">
-        <div class="preloader"></div>
+        <div class="dots-container">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        <div class="preloader-progress">
+          <div class="preloader-bar" id="progress-bar"></div>
+        </div>
+        <div class="loading-text" id="loading-text">Loading...</div>
       </div>
     </div>
-    <div class="container">
-      <div id="content">
-        <div class="container-fluid">
-          <div class="no-pdding login-box">
-            <div class="row no-margin w-100 bklmj">
-              <div class="col-lg-6 col-md-6 log-det">
-                <h2>Signup</h2>
 
-                <div class="row no-margin past">
-                  <p>Dont Have an Account? <span>Create your Account</span></p>
+    <div id="content">
+      <div class="auth-container">
+        <div class="row g-0">
+          <!-- Signup Form Section -->
+          <div class="col-lg-7 col-md-6 form-section">
+            <h2 class="auth-heading">Join Our Community 🎉</h2>
+            <form action="#" method="post" class="needs-validation" novalidate>
+              {% csrf_token %}
+              
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="first_name" class="form-label">First Name</label>
+                  <input type="text" 
+                        class="form-control" 
+                        id="first_name" 
+                        name="first_name" 
+                        required
+                        placeholder="Enter your first name">
                 </div>
-                <form action="#" class="signin-form" method="post">
-                  {% csrf_token %}
 
-                  <div class="text-box-cont">
-                    <div class="input-group mb-3">
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder="first name"
-                        name="first_name"
-                        aria-describedby="basic-addon1"
+                <div class="col-md-6">
+                  <label for="last_name" class="form-label">Last Name</label>
+                  <input type="text" 
+                        class="form-control" 
+                        id="last_name" 
+                        name="last_name" 
                         required
-                      />
-                    </div>
+                        placeholder="Enter your last name">
+                </div>
 
-                    <div class="input-group mb-3">
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder="last name"
-                        name="last_name"
-                        aria-describedby="basic-addon1"
+                <div class="col-12">
+                  <label for="username" class="form-label">Username</label>
+                  <input type="text" 
+                        class="form-control" 
+                        id="username" 
+                        name="username" 
                         required
-                      />
-                    </div>
-                    <div class="input-group mb-3">
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Username"
-                        name="username"
-                        aria-label="Username"
-                        aria-describedby="basic-addon1"
+                        placeholder="Choose a username">
+                </div>
+
+                <div class="col-12">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" 
+                        class="form-control" 
+                        id="email" 
+                        name="email" 
                         required
-                      />
-                    </div>
-                    <div class="input-group mb-3">
-                      <input
-                        type="email"
-                        class="form-control"
-                        placeholder="email"
-                        name="email"
-                        aria-label="email"
-                        aria-describedby="basic-addon1"
-                        required
-                      />
-                    </div>
-                    <div class="input-group mb-3">
-                      <input
-                          type="password"
-                          class="form-control"
-                          id="password"
-                          placeholder="Password"
-                          name="password"
-                          aria-label="Password"
-                          aria-describedby="basic-addon1"
+                        placeholder="Enter your email">
+                </div>
+
+                <div class="col-12">
+                  <div class="password-container">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" 
+                          class="form-control" 
+                          id="password" 
+                          name="password" 
                           required
-                      />
-                      <span class="input-group-text toggle-password" onclick="togglePasswordVisibility()">
-                          <i class="fas fa-eye" id="toggleIcon"></i>
-                      </span>
+                          placeholder="••••••••">
+                          <br>
+                    <i class="fas fa-eye password-toggle" onclick="togglePassword()"></i>
                   </div>
-                  
-                  
-                    {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}" role="alert">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                
-
-                    <div class="right-bkij mb-3">
-                      <button class="btn btn-success btn-round">Signup</button>
-                    </div>
-                    <br />
-                    <div class="row linkoi">
-                      <div class="col-sm-5"></div>
-                      <div class="col-sm-7"></div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-
-              <div class="col-lg-6 col-md-6 box-de">
-                <div class="ditk-inf">
-                  <h2 class="w-100">Welcome Back</h2>
-                  <p>
-                    Already have an account? <br />
-                    clicking the Login Button
-                  </p>
-                  <a href="/recipe/login_page/">
-                    <button type="button" class="btn btn-outline-light">
-                      Login
-                    </button>
-                  </a>
                 </div>
               </div>
+
+              {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'success' %}success{% else %}danger{% endif %} mt-3">
+                  {{ message }}
+                </div>
+                {% endfor %}
+              {% endif %}
+
+              <button type="submit" class="btn btn-primary w-100 mt-4">
+                Create Account
+              </button>
+            </form>
+          </div>
+
+          <!-- Welcome Section -->
+          <div class="col-lg-5 col-md-6 welcome-section">
+            <div class="inner">
+              <h3 class="mb-4">Already a Member?</h3>
+              <p class="mb-4 opacity-75">
+                Welcome back! Sign in to access your personalized recipe collection.
+              </p>
+              <a href="/recipe/login_page/" class="btn btn-outline-light">
+                Sign In
+              </a>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </body>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      setTimeout(function () {
-        document.querySelector(".preloader-overlay").style.display = "none";
-        document.getElementById("content").style.display = "block";
-      }, 3000);
-    });
-
-
-    function togglePasswordVisibility() {
-      const passwordField = document.getElementById("password");
-      const toggleIcon = document.getElementById("toggleIcon");
-
-      if (passwordField.type === "password") {
-          passwordField.type = "text";
-          toggleIcon.classList.remove("fa-eye");
-          toggleIcon.classList.add("fa-eye-slash");
-      } else {
-          passwordField.type = "password";
-          toggleIcon.classList.remove("fa-eye-slash");
-          toggleIcon.classList.add("fa-eye");
+    <script>
+      // Password Toggle
+      function togglePassword() {
+        const password = document.getElementById('password');
+        const icon = document.querySelector('.password-toggle');
+        if (password.type === 'password') {
+          password.type = 'text';
+          icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+          password.type = 'password';
+          icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
       }
-  }
-  </script>
 
-  <script src="/static/assets/js/jquery-3.2.1.min.js"></script>
-  <script src="/static/assets/js/popper.min.js"></script>
-  <script src="/static/assets/js/bootstrap.min.js"></script>
-  <script src="/static/assets/js/script.js"></script>
+      // Form Validation
+      (() => {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+          form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+          }, false)
+        })
+      })();
+
+      // Preloader Simulation
+      document.addEventListener("DOMContentLoaded", function() {
+        const progressBar = document.getElementById("progress-bar");
+        const loadingText = document.getElementById("loading-text");
+        let width = 0;
+        const loadingInterval = setInterval(function() {
+          if (width >= 100) {
+            clearInterval(loadingInterval);
+            loadingText.textContent = "Ready!";
+            const preloader = document.getElementById("preloader");
+            setTimeout(function() {
+              preloader.style.opacity = "0";
+              setTimeout(function() {
+                preloader.style.display = "none";
+                document.getElementById("content").style.display = "block";
+              }, 500);
+            }, 400);
+          } else {
+            width += 1;
+            progressBar.style.width = width + "%";
+            if (width === 25) {
+              loadingText.textContent = "Loading assets...";
+            } else if (width === 50) {
+              loadingText.textContent = "Preparing content...";
+            } else if (width === 75) {
+              loadingText.textContent = "Almost there...";
+            }
+          }
+        }, 30);
+      });
+    </script>
+
+    <script src="/static/assets/js/jquery-3.2.1.min.js"></script>
+    <script src="/static/assets/js/popper.min.js"></script>
+    <script src="/static/assets/js/bootstrap.min.js"></script>
+    <script src="/static/assets/js/script.js"></script>
+  </body>
 </html>
