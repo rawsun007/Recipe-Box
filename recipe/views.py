@@ -4,9 +4,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import CommunityRecipe, SavedRecipe, UserProfile
-from .utils import upload_image_to_cloudinary,fetch_recipes
+from .utils import upload_image_to_cloudinary, fetch_recipes
 import re  # For sanitizing public IDs
 import requests
 import cloudinary
@@ -48,8 +48,6 @@ def add(request):
     return render(request, "recipe/add.html", {'recipes': recipes})
 
 
-
-
 # Home page with recipe list and search
 @login_required(login_url="/recipe/login_page/")
 def home(request):
@@ -65,7 +63,13 @@ def home(request):
     page_number = request.GET.get("page", 1)
     paginated_recipes = paginator.get_page(page_number)
 
-    return render(request, 'recipe/home.html', {
+    # Check for AJAX request
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        template = 'recipe/home_partial.html'
+    else:
+        template = 'recipe/home.html'
+
+    return render(request, template, {
         'recipes': paginated_recipes,
         'search_query': search_query,
     })
@@ -83,9 +87,6 @@ def delete_recipe(request, id, source):
 
     recipe.delete()
     return redirect("/recipe/home/" if source == "CommunityRecipe" else "/recipe/user_pro/")
-
-
-
 
 
 # Update a community recipe
@@ -118,10 +119,6 @@ def update_recipe(request, id):
             messages.error(request, "All fields are required.")
 
     return render(request, "recipe/update_recipe.html", {'recipe': recipe})
-
-
-
-
 
 
 # User login
@@ -157,7 +154,6 @@ def signup(request):
             messages.error(request, "Email already in use.")
             return redirect("/recipe/signup/")
 
-
         user = User.objects.create_user(
             first_name=first_name,
             last_name=last_name,
@@ -167,7 +163,6 @@ def signup(request):
         )
         messages.success(request, "Account created successfully!")
         return redirect("/recipe/login_page/")
-    
 
     return render(request, "recipe/signup.html")
 
@@ -189,50 +184,56 @@ def delete_profile(request):
     return render(request, 'recipe/delete_profile.html')
 
 
-
-
 def explore_recipes(request):
     recipe_name = request.GET.get('Search', '').strip()
     api_start = int(request.GET.get('api_start', 0))
     page = int(request.GET.get('page', 1))
     page_size = 3
-    
+
     # Calculate client-side paging
     recipes_buffer = request.session.get('recipes_buffer', [])
     total_recipes = request.session.get('total_recipes', 0)
-    
-    # Check if we need new data from API
-    if recipe_name and (
-        recipe_name != request.session.get('current_search', '') or 
-        not recipes_buffer or 
-        (page_size * (page - 1)) >= len(recipes_buffer)
-    ):
-        all_recipes, has_more, total_count = fetch_recipes(recipe_name, api_start)
-        
-        # Store in session
+    current_search = request.session.get('current_search', '')
+
+    # If new search or no buffer, fetch from API
+    if recipe_name and (recipe_name != current_search or not recipes_buffer):
+        all_recipes, has_more, total_count = fetch_recipes(recipe_name, 0)
         request.session['recipes_buffer'] = all_recipes
         request.session['current_search'] = recipe_name
         request.session['total_recipes'] = total_count
         recipes_buffer = all_recipes
         total_recipes = total_count
-    
-    # Calculate pagination details
+        api_start = 0
+
+    # Calculate indices for current page
     start_idx = (page - 1) * page_size
     end_idx = start_idx + page_size
+
+    # If user paginates past current buffer, fetch more from API and append
+    while recipe_name and end_idx > len(recipes_buffer) and len(recipes_buffer) < total_recipes:
+        # Fetch next batch from API
+        next_api_start = len(recipes_buffer)
+        new_recipes, has_more, _ = fetch_recipes(recipe_name, next_api_start)
+        if not new_recipes:
+            break  # No more recipes to fetch
+        recipes_buffer += new_recipes
+        request.session['recipes_buffer'] = recipes_buffer  # Update session buffer
+
+    # Now get the current page's recipes
     current_page_recipes = recipes_buffer[start_idx:end_idx] if recipes_buffer else []
-    
+
     # Calculate if we need more data from API for next page
     need_more_data = len(recipes_buffer) <= end_idx and total_recipes > len(recipes_buffer)
-    
+
     # Calculate pagination controls
     total_pages = (total_recipes // page_size) + (1 if total_recipes % page_size > 0 else 0)
     has_next = page < total_pages
     has_prev = page > 1
     next_page = page + 1 if has_next else page
     prev_page = page - 1 if has_prev else page
-    
+
     # Calculate API pagination
-    next_api_start = api_start + len(recipes_buffer) if need_more_data else api_start
+    next_api_start = len(recipes_buffer) if need_more_data else api_start
 
     # Determine template based on AJAX request
     template = 'recipe/explore_recipes.html'
@@ -257,7 +258,6 @@ def explore_recipes(request):
 
 
 # User-specific saved recipes
-
 @login_required(login_url="/recipe/login_page/")
 def save_user_recipe(request):
     if request.method == 'POST':
@@ -305,15 +305,8 @@ def save_user_recipe(request):
     else:
         messages.error(request, "Invalid request method.")
         return redirect('user_pro')
-    
 
 
-
-
-
-    
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-    
 @login_required(login_url="/recipe/login_page/")
 def user_pro(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
@@ -333,6 +326,13 @@ def user_pro(request):
     except (EmptyPage, PageNotAnInteger):
         page_obj = paginator.get_page(1)  # Default to the first page
 
+    # Render partial if AJAX
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return render(request, 'recipe/user_pro_cards_partial.html', {
+            'queryset': page_obj,
+            'search_performed': search_performed,
+            'search_query': search_query,
+        })
     return render(request, 'recipe/user_pro.html', {
         'queryset': page_obj,
         'search_performed': search_performed,

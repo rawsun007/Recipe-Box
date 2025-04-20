@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta
@@ -33,719 +32,322 @@
         color: #050505;
       }
 
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
+      .preloader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #f8f9fa;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.5s ease-out;
       }
 
-      .main {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
+      .preloader-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
       }
-      /* Card List */
-      
 
-      .style-controls {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  justify-content: center;
-  gap: 15px;
-}
-
-.style-btn {
-  background-color: #c89b3f;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.style-btn:hover {
-  background-color: #a67c28;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-#currentStyle {
-  font-size: 14px;
-  color: #666;
-}
-
-/* Fixed horizontal layout and consistent card structure */
-.cards {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 20px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  justify-content: center;
-  width: 100%;
-}
-
-.cards_item {
-  display: flex;
-  flex: 0 0 calc(33.333% - 20px);
-  max-width: calc(33.333% - 20px);
-  box-sizing: border-box;
-  margin-bottom: 20px;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-}
-
-/* Fixed image container */
-.card_image {
-  position: relative;
-  height: 250px;
-  width: 100%;
-  overflow: hidden;
-}
-
-.card_image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Fixed title positioning and styling */
-.card_title {
-  width: 100%;
-  text-align: center;
-  padding: 15px 10px;
-  margin: 0;
-  position: relative;
-  z-index: 1;
-  box-sizing: border-box;
-}
-
-/* Fixed content area */
-.card_content {
-  flex-grow: 1;
-  padding: 15px;
-  overflow-y: auto;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-
-.card_text p {
-  margin: 0 0 10px;
-  line-height: 1.5;
-}
-
-/* Fixed button container */
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 15px;
-  margin-top: auto;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  flex: 0 0 auto;
-  min-width: 100px;
-  text-align: center;
-}
-
-@media (max-width: 992px) {
-  .cards_item {
-    flex: 0 0 calc(50% - 20px);
-    max-width: calc(50% - 20px);
-  }
-}
-
-@media (max-width: 768px) {
-  .cards_item {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-}
-
-/* Style 1: Modern Clean */
-.style-modern .card {
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-  background: white;
-}
-
-.style-modern .card_image {
-  border-radius: 10px 10px 0 0;
-  height: 220px;
-}
-
-.style-modern .card_title {
-  font-family: 'Montserrat', sans-serif;
-  color: #333;
-  background: white;
-  position: relative;
-}
-
-.style-modern .card_title::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 3px;
-  background-color: #2ecc71;
-}
-
-.style-modern .card_content {
-  background-color: white;
-  padding: 20px;
-}
-
-.style-modern .button-container {
-  padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 0 0 10px 10px;
-}
-
-.style-modern .btn {
-  border-radius: 30px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 0.9em;
-  transition: all 0.3s ease;
-  background-color: #2ecc71;
-  color: white;
-}
-
-/* Style 2: Dark Mode */
-.style-dark .card {
-  background-color: #222;
-  color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.style-dark .card_image {
-  border-bottom: 1px solid #444;
-}
-
-.style-dark .card_title {
-  color: #fff;
-  background-color: #222;
-  padding: 20px 15px;
-}
-
-.style-dark .card_title::after {
-  content: "";
-  position: absolute;
-  bottom: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 2px;
-  background-color: #e74c3c;
-}
-
-.style-dark .card_content {
-  background-color: #333;
-}
-
-.style-dark .card_text p {
-  color: #ddd;
-}
-
-.style-dark .button-container {
-  background-color: #222;
-  border-top: 1px solid #444;
-}
-
-.style-dark .btn {
-  background-color: #e74c3c;
-  color: white;
-}
-
-/* Style 3: Playful */
-.style-playful .card {
-  border-radius: 20px;
-  box-shadow: 0 15px 25px rgba(0,0,0,0.1);
-  border: 5px solid #fff;
-  background-color: #fcfcfc;
-  overflow: visible;
-}
-
-.style-playful .card_image {
-  border-radius: 15px;
-  margin: 15px 15px 0;
-  width: calc(100% - 30px);
-  height: 200px;
-  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-}
-
-.style-playful .card_title {
-  font-family: 'Comic Sans MS', cursive;
-  color: #8e44ad;
-  padding: 20px 15px 15px;
-  transform: rotate(-1deg);
-  background-color: transparent;
-  margin-top: 10px;
-}
-
-.style-playful .card_title::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%) rotate(2deg);
-  width: 80px;
-  height: 4px;
-  background-color: #f1c40f;
-}
-
-.style-playful .card_content {
-  background-color: #fff;
-  border-radius: 15px;
-  margin: 5px 15px;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.05);
-  padding: 20px;
-}
-
-.style-playful .button-container {
-  justify-content: center;
-  gap: 10px;
-  padding: 15px;
-}
-
-.style-playful .btn {
-  border-radius: 20px;
-  background-color: #8e44ad;
-  color: white;
-  transform: rotate(-1deg);
-  font-weight: bold;
-  font-size: 0.95em;
-}
-
-/* Style 4: Minimalist */
-.style-minimalist .card {
-  box-shadow: none;
-  border: 1px solid #eee;
-  border-radius: 0;
-  background-color: white;
-}
-
-.style-minimalist .card_image {
-  height: 200px;
-  border-bottom: 1px solid #eee;
-}
-
-.style-minimalist .card_title {
-  font-family: 'Arial', sans-serif;
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-size: 16px;
-  padding: 20px 15px;
-  background-color: white;
-}
-
-.style-minimalist .card_content {
-  padding: 20px;
-  background-color: white;
-}
-
-.style-minimalist .card_text p {
-  font-size: 12px;
-  color: #999;
-}
-
-.style-minimalist .button-container {
-  border-top: 1px solid #eee;
-  padding: 15px;
-}
-
-.style-minimalist .btn {
-  background-color: white;
-  color: #333;
-  border: 1px solid #ddd;
-  border-radius: 0;
-  padding: 8px 15px;
-  font-size: 0.8em;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* Style 5: Vintage */
-.style-vintage .card {
-  background-color: #f8f3e2;
-  border: none;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.style-vintage .card_image {
-  border: 10px solid #fff;
-  margin: 15px 15px 0;
-  width: calc(100% - 50px);
-  height: 200px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.2);
-}
-
-.style-vintage .card_image::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 252, 235, 0.1);
-  pointer-events: none;
-}
-
-.style-vintage .card_title {
-  font-family: 'Times New Roman', serif;
-  color: #5d4037;
-  text-shadow: 1px 1px 0 #fff;
-  padding: 20px 15px;
-  background-color: transparent;
-}
-
-.style-vintage .card_title::after {
-  content: "";
-  position: absolute;
-  bottom: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 50px;
-  height: 2px;
-  background-color: #5d4037;
-}
-
-.style-vintage .card_content {
-  background-color: transparent;
-  padding: 15px 25px;
-}
-
-.style-vintage .card_text p {
-  font-family: 'Georgia', serif;
-  color: #5d4037;
-}
-
-.style-vintage .button-container {
-  background-color: #e0d6c3;
-  padding: 15px;
-}
-
-.style-vintage .btn {
-  background-color: #8d6e63;
-  color: white;
-  font-family: 'Georgia', serif;
-}
-
-
-     /* Base pagination styling that responds to style changes */
-.pagination-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 30px;
-  gap: 10px;
-}
-
-.pagination-button {
-  padding: 8px 16px;
-  cursor: pointer;
-  border: none;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  min-width: 40px;
-  text-align: center;
-}
-
-.page-info {
-  padding: 8px 16px;
-  text-align: center;
-  font-weight: bold;
-}
-
-/* Style 1: Modern Clean pagination */
-.style-modern .pagination-container {
-  margin-top: 30px;
-}
-
-.style-modern .pagination-button {
-  border-radius: 30px;
-  background-color: #2ecc71;
-  color: white;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 0.9em;
-}
-
-.style-modern .pagination-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-}
-
-.style-modern .pagination-button:disabled {
-  background-color: #e0e0e0;
-  color: #999;
-  transform: none;
-  box-shadow: none;
-}
-
-.style-modern .page-info {
-  background-color: white;
-  color: #333;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-}
-
-/* Style 2: Dark Mode pagination */
-.style-dark .pagination-container {
-  margin-top: 30px;
-}
-
-.style-dark .pagination-button {
-  background-color: #e74c3c;
-  color: white;
-  border-radius: 5px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-.style-dark .pagination-button:hover {
-  background-color: #c0392b;
-}
-
-.style-dark .pagination-button:disabled {
-  background-color: #555;
-  color: #888;
-}
-
-.style-dark .page-info {
-  background-color: #333;
-  color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-/* Style 3: Playful pagination */
-.style-playful .pagination-container {
-  margin-top: 30px;
-}
-
-.style-playful .pagination-button {
-  background-color: #8e44ad;
-  color: white;
-  border-radius: 20px;
-  transform: rotate(-1deg);
-  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-  font-family: 'Comic Sans MS', cursive;
-}
-
-.style-playful .pagination-button:hover {
-  transform: rotate(1deg) scale(1.05);
-}
-
-.style-playful .pagination-button:disabled {
-  background-color: #d8b5e6;
-  transform: none;
-}
-
-.style-playful .page-info {
-  background-color: #fff;
-  color: #8e44ad;
-  border-radius: 15px;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.05);
-  transform: rotate(1deg);
-  font-family: 'Comic Sans MS', cursive;
-}
-
-/* Style 4: Minimalist pagination */
-.style-minimalist .pagination-container {
-  margin-top: 30px;
-}
-
-.style-minimalist .pagination-button {
-  background-color: white;
-  color: #333;
-  border: 1px solid #ddd;
-  border-radius: 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 0.8em;
-}
-
-.style-minimalist .pagination-button:hover {
-  border-color: #333;
-}
-
-.style-minimalist .pagination-button:disabled {
-  color: #ddd;
-  border-color: #eee;
-}
-
-.style-minimalist .page-info {
-  background-color: white;
-  color: #333;
-  border: 1px solid #eee;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-size: 0.8em;
-}
-
-/* Style 5: Vintage pagination */
-.style-vintage .pagination-container {
-  margin-top: 30px;
-}
-
-.style-vintage .pagination-button {
-  background-color: #8d6e63;
-  color: white;
-  font-family: 'Georgia', serif;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.style-vintage .pagination-button:hover {
-  background-color: #6d4c41;
-}
-
-.style-vintage .pagination-button:disabled {
-  background-color: #d7ccc8;
-  color: #a1887f;
-}
-
-.style-vintage .page-info {
-  background-color: #f8f3e2;
-  color: #5d4037;
-  font-family: 'Times New Roman', serif;
-  border: 1px solid #d7ccc8;
-  text-shadow: 1px 1px 0 #fff;
-}
-
-        
-      
-
-.preloader-overlay {
-    position: fixed;
+      .dots-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        height: 50px;
+      }
+
+      .dot {
+        width: 16px;
+        height: 16px;
+        margin: 0 8px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #6366f1, #4f46e5);
+        box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+        animation: jumpingDot 1.2s infinite;
+      }
+
+      .dot:nth-child(1) {
+        animation-delay: 0s;
+      }
+
+      .dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      .dot:nth-child(4) {
+        animation-delay: 0.6s;
+      }
+
+      .dot:nth-child(5) {
+        animation-delay: 0.8s;
+      }
+
+      @keyframes jumpingDot {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-25px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      .preloader-progress {
+        position: relative;
+        width: 200px;
+        height: 4px;
+        background: #e5e7eb;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .preloader-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #4f46e5, #6366f1);
+        border-radius: 4px;
+        transition: width 0.2s ease;
+      }
+
+      .loading-text {
+        margin-top: 10px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        color: #6366f1;
+        font-weight: 500;
+        letter-spacing: 1px;
+      }
+
+      #content {
+        display: none;
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+
+      .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 2rem 0;
+    list-style: none;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.page-item {
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    height: 40px;
+}
+
+.page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 0.8rem;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 3px 3px 8px rgba(209, 217, 230, 0.8), 
+                -3px -3px 8px rgba(255, 255, 255, 0.8);
+    position: relative;
+    overflow: hidden;
+}
+
+.page-link::after {
+    content: '';
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #f8f9fa;
-    z-index: 9999;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    border-radius: 10px;
+}
+
+.page-link:hover {
+    color: #2d3748;
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 10px rgba(209, 217, 230, 0.8), 
+                -4px -4px 10px rgba(255, 255, 255, 0.8);
+}
+
+.page-link:hover::after {
+    opacity: 1;
+}
+
+.page-link:active {
+    transform: translateY(0);
+    box-shadow: inset 3px 3px 6px rgba(209, 217, 230, 0.5), 
+                inset -3px -3px 6px rgba(255, 255, 255, 0.5);
+}
+
+.current.page-link {
+    background: #4f5eff; /* Exact color from second image */
+    color: white;
+    font-weight: 600;
+    min-width: max-content;
+    padding: 0 1.2rem;
+    box-shadow: inset 2px 2px 5px rgba(58, 68, 180, 0.5),
+                inset -2px -2px 5px rgba(106, 116, 255, 0.5),
+                0 2px 4px rgba(79, 94, 255, 0.3);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    cursor: default;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: opacity 0.5s ease-out;
-  }
-
-  .preloader-container {
+    text-align: center;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-  }
+}
 
-  .dots-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    height: 50px;
-  }
+.current.page-link::after {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+    opacity: 1;
+}
 
-  .dot {
-    width: 16px;
-    height: 16px;
-    margin: 0 8px;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #6366f1, #4f46e5);
-    box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
-    animation: jumpingDot 1.2s infinite;
-  }
+/* Disabled state */
+.page-item.disabled .page-link {
+    color: #a0aec0;
+    background: linear-gradient(145deg, #f8f9fa, #f1f3f5);
+    box-shadow: inset 1px 1px 2px rgba(209, 217, 230, 0.3),
+                inset -1px -1px 2px rgba(255, 255, 255, 0.3);
+    cursor: not-allowed;
+    opacity: 0.75;
+}
 
-  .dot:nth-child(1) {
-    animation-delay: 0s;
-  }
-  
-  .dot:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-  
-  .dot:nth-child(3) {
-    animation-delay: 0.4s;
-  }
-  
-  .dot:nth-child(4) {
-    animation-delay: 0.6s;
-  }
-  
-  .dot:nth-child(5) {
-    animation-delay: 0.8s;
-  }
-
-  @keyframes jumpingDot {
-    0% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-25px);
-    }
-    100% {
-      transform: translateY(0);
-    }
-  }
-
-  .preloader-progress {
-    position: relative;
-    width: 200px;
-    height: 4px;
-    background: #e5e7eb;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .preloader-bar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #4f46e5, #6366f1);
-    border-radius: 4px;
-    transition: width 0.2s ease;
-  }
-
-  .loading-text {
-    margin-top: 10px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    color: #6366f1;
-    font-weight: 500;
-    letter-spacing: 1px;
-  }
-
-  #content {
+.page-item.disabled .page-link::after {
     display: none;
-    animation: fadeIn 0.5s ease-in;
-  }
+}
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+/* First, Previous, Next, Last buttons */
+.page-item:first-child .page-link,
+.page-item:nth-child(2) .page-link,
+.page-item:nth-last-child(2) .page-link,
+.page-item:last-child .page-link {
+    font-weight: 600;
+    min-width: max-content;
+    background: linear-gradient(145deg, #fafbfc, #f0f2f5);
+}
+
+/* Ensure consistent spacing */
+.pagination {
+    position: relative;
+}
+
+.pagination::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        rgba(209, 217, 230, 0),
+        rgba(209, 217, 230, 0.3) 20%,
+        rgba(209, 217, 230, 0.3) 80%,
+        rgba(209, 217, 230, 0));
+    z-index: -1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .pagination {
+        gap: 0.4rem;
+        padding: 1rem 0;
+    }
+    .page-link {
+        min-width: 36px;
+        height: 36px;
+        padding: 0 0.7rem;
+        font-size: 0.9rem;
+        border-radius: 8px;
+    }
+    
+    .page-item {
+        height: 36px;
+    }
+    
+    .current.page-link {
+        padding: 0 1rem;
+    }
+}
+
+/* Smaller screens */
+@media (max-width: 480px) {
+    .pagination {
+        gap: 0.3rem;
+    }
+    
+    .page-link {
+        min-width: 32px;
+        height: 32px;
+        padding: 0 0.6rem;
+        font-size: 0.85rem;
+    }
+    
+    .page-item {
+        height: 32px;
+    }
+    
+    /* Hide text on small screens */
+    .page-item:first-child .page-link {
+        min-width: 32px;
+        width: max-content;
+    }
+}
+
+/* Animation */
+@keyframes pagination-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+/* Smooth focus states */
+.page-link:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 94, 255, 0.2), 
+                3px 3px 8px rgba(209, 217, 230, 0.8), 
+                -3px -3px 8px rgba(255, 255, 255, 0.8);
+}
+
+.current.page-link:focus {
+    box-shadow: 0 0 0 3px rgba(79, 94, 255, 0.3),
+                inset 2px 2px 5px rgba(58, 68, 180, 0.5),
+                inset -2px -2px 5px rgba(106, 116, 255, 0.5);
+}
 
     </style>
     <link
@@ -772,55 +374,42 @@
     />
     <link href="{% static 'css/style.css' %}" rel="stylesheet" />
     <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/card.css' %}" rel="stylesheet" />
 
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Recipes Home</title>
     <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'css/bootstrap.css' %}"
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{% static 'assets/images/favicon-16x16.png' %}"
     />
     <link
-      href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap"
-      rel="stylesheet"
-    />
-    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
-      integrity="sha256-mLBIhmBvigTFWPSCtvdu6a76T+3Xyt+K571hupeFLg4="
-      crossorigin="anonymous"
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{% static 'assets/images/favicon-32x32.png' %}"
     />
     <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css"
-      integrity="sha256-UK1EiopXIL+KVhfbFa8xrmAWPeBjMVdvYMYkTAEv/HI="
-      crossorigin="anonymous"
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="{% static 'assets/images/android-chrome-192x192.png' %}"
     />
-    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
-    <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="{% static 'assets/images/android-chrome-512x512.png' %}"
+    />
 
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/images/favicon-16x16.png' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/images/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'assets/images/android-chrome-192x192.png' %}">
-    <link rel="icon" type="image/png" sizes="512x512" href="{% static 'assets/images/android-chrome-512x512.png' %}">
-    
     <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/images/apple-touch-icon.png' %}">
-    
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="{% static 'assets/images/apple-touch-icon.png' %}"
+    />
+
     <!-- Web Manifest -->
-    <link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}">
-    
-
-
+    <link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}" />
   </head>
 
   <body>
@@ -840,21 +429,18 @@
       </div>
     </div>
 
-
     <div id="content">
       <div class="loader"></div>
       <div class="hero_area">
         <header class="header_section">
           <div class="container-fluid">
             <nav class="navbar navbar-expand-lg custom_nav-container">
-              <a class="navbar-brand" href= {% url "home" %} >
+              <a class="navbar-brand" href="{% url 'home' %}">
                 <span>Recipe Box</span>
               </a>
               <div class="" id="">
                 <div class="User_option">
-               
                   {% if user.is_authenticated %}
-                  
                   <a href="{% url 'explore_recipes' %}">
                     <i class="fa fa-user" aria-hidden="true"></i>
                     <span>Global Recipes, One Click Away</span>
@@ -864,25 +450,24 @@
                     <i class="fa fa-user" aria-hidden="true"></i>
                     <span>Saved Recipes</span>
                   </a>
-  
 
                   <a href="{% url 'logout_page' %}">
                     <i class="fa fa-user" aria-hidden="true"></i>
                     <span>Logout</span>
                   </a>
-                  
+
                   <a href="{% url 'delete_profile' %}">
                     <i class="fa fa-user" aria-hidden="true"></i>
                     <span>delete account</span>
                   </a>
 
-               {% else %}
+                  {% else %}
 
                   <a href="{% url 'login_page' %}">
                     <i class="fa fa-user" aria-hidden="true"></i>
                     <span>Login</span>
                   </a>
-                  
+
                   {% endif %}
 
                   <a href="/recipe/home/">
@@ -997,94 +582,17 @@
         </section>
       </div>
 
+ 
 
-      <div class="main">
-        <ul class="cards">
-            {% for recipe in recipes %}
-                <li class="cards_item">
-                    <div class="card">
-                        <div class="card_image">
-                            <img src="{{ recipe.img }}" alt="Recipe Image" />
-                        </div>
-                        <h2 class="card_title">{{ recipe.name }}</h2>
-                        <div class="card_content">
-                            <div class="card_text">
-                                <p>{{ recipe.about }}</p>
-                                <hr />
-                            </div>
-                        </div>
-                        <div class="button-container">
-    {% if recipe.created_by == user %}
-        <a href="{% url 'delete_recipe' id=recipe.id source='CommunityRecipe' %}">
-            <button class="btn delete-btn btn-danger">Delete</button>
-        </a>
-        <a href="{% url 'update_recipe' id=recipe.id %}">
-            <button class="btn update-btn btn-success">Update</button>
-        </a>
-    {% endif %}
+      <!-- Add this wrapper -->
+<div id="recipes-container">
+  {% include 'recipe/home_partial.html' %}
+
+
 </div>
 
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    
-    {% if not recipes %}
-    <!-- No Recipes Found Message -->
-    <div style="display: flex; justify-content: center; align-items: center; height: 60vh; text-align: center;">
-        <p style="font-size: 1.5em; color: #666; background-color: #f9f9f9; padding: 20px 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-          There are no recipes available in the community.
-        </p>
-    </div>
-{% endif %}
 
-    
-    <!-- Conditionally render pagination only if there are recipes -->
-    {% if recipes.has_other_pages %}
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                {% if recipes.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page=1">&laquo; First</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ recipes.previous_page_number }}">Previous</a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">&laquo; First</span>
-                </li>
-                <li class="page-item disabled">
-                    <span class="page-link">Previous</span>
-                </li>
-                {% endif %}
-    
-                <li class="page-item">
-                    <span class="current page-link">
-                        Page {{ recipes.number }} of {{ recipes.paginator.num_pages }}
-                    </span>
-                </li>
-    
-                {% if recipes.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ recipes.next_page_number }}">Next</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ recipes.paginator.num_pages }}">Last &raquo;</a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">Next</span>
-                </li>
-                <li class="page-item disabled">
-                    <span class="page-link">Last &raquo;</span>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-    {% endif %}
-    
+
 
       <section class="about_section layout_padding">
         <div class="container">
@@ -1112,7 +620,7 @@
                   just starting out in the kitchen, you'll find something
                   delicious to try on our site.
                 </p>
-                <a href="{% url "explore_recipes" %}">
+                <a href="{% url 'explore_recipes' %}">
                   <i class="fa fa-arrow-right" aria-hidden="true"></i>
                 </a>
               </div>
@@ -1128,9 +636,9 @@
               <a
                 href="https://www.instagram.com/roshan_ramani01?igsh=MWlpNWI2MWZmMDB6Yg%3D%3D&utm_source=qr"
               >
-              <i class="fa fa-instagram" aria-hidden="true"></i>
-            </a>
-          
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+
               <a
                 href="https://www.linkedin.com/in/roshan-ramani-0510102b2?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
               >
@@ -1151,48 +659,86 @@
         </footer>
       </div>
     </div>
-    
   </body>
 
-  
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Simulate loading process
-    const progressBar = document.getElementById("progress-bar");
-    const loadingText = document.getElementById("loading-text");
-    let width = 0;
-    const loadingInterval = setInterval(function() {
-      if (width >= 100) {
-        clearInterval(loadingInterval);
-        loadingText.textContent = "Ready!";
-        
-        // Fade out preloader
-        const preloader = document.getElementById("preloader");
-        setTimeout(function() {
-          preloader.style.opacity = "0";
-          
-          // Show content after preloader fades
-          setTimeout(function() {
-            preloader.style.display = "none";
-            document.getElementById("content").style.display = "block";
-          }, 500);
-        }, 400);
-      } else {
-        width += 1;
-        progressBar.style.width = width + "%";
-        
-        // Update loading text at certain percentages
-        if (width === 25) {
-          loadingText.textContent = "Loading assets...";
-        } else if (width === 50) {
-          loadingText.textContent = "Preparing content...";
-        } else if (width === 75) {
-          loadingText.textContent = "Almost there...";
-        }
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const recipesContainer = document.getElementById('recipes-container');
+    
+      function loadPage(url) {
+        fetch(url, {
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+        .then(response => response.text())
+        .then(html => {
+          recipesContainer.innerHTML = html;
+          // Update browser history
+          history.pushState({}, '', url);
+        })
+        .catch(error => console.error('Error:', error));
       }
-    }, 30);
-  });
-</script>
+    
+      // Handle pagination clicks
+      document.body.addEventListener('click', function(e) {
+        if (e.target.matches('.page-link')) {
+          e.preventDefault();
+          const url = new URL(e.target.href);
+          // Preserve search query
+          const searchParams = new URLSearchParams(window.location.search);
+          if (searchParams.has('Search')) {
+            url.searchParams.set('Search', searchParams.get('Search'));
+          }
+          loadPage(url.href);
+        }
+      });
+    
+      // Handle browser back/forward
+      window.addEventListener('popstate', function() {
+        loadPage(window.location.href);
+      });
+    });
+    </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Simulate loading process
+      const progressBar = document.getElementById("progress-bar");
+      const loadingText = document.getElementById("loading-text");
+      let width = 0;
+      const loadingInterval = setInterval(function () {
+        if (width >= 100) {
+          clearInterval(loadingInterval);
+          loadingText.textContent = "Ready!";
+
+          // Fade out preloader
+          const preloader = document.getElementById("preloader");
+          setTimeout(function () {
+            preloader.style.opacity = "0";
+
+            // Show content after preloader fades
+            setTimeout(function () {
+              preloader.style.display = "none";
+              document.getElementById("content").style.display = "block";
+            }, 500);
+          }, 400);
+        } else {
+          width += 1;
+          progressBar.style.width = width + "%";
+
+          // Update loading text at certain percentages
+          if (width === 25) {
+            loadingText.textContent = "Loading assets...";
+          } else if (width === 50) {
+            loadingText.textContent = "Preparing content...";
+          } else if (width === 75) {
+            loadingText.textContent = "Almost there...";
+          }
+        }
+      }, 30);
+    });
+  </script>
 
   <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
   <script src="{% static 'js/bootstrap.js' %}"></script>
@@ -1203,5 +749,5 @@
     crossorigin="anonymous"
   ></script>
   <script src="{% static 'js/custom.js' %}"></script>
+</html>
 
-  </html>

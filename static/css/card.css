@@ -1,0 +1,1580 @@
+.search1-button {
+  background-color: #4caf50;
+  /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 25px;
+  /* Makes the button cylindrical */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.style-controls {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: center;
+  gap: 15px;
+}
+
+.style-btn {
+  background-color: #c89b3f;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.style-btn:hover {
+  background-color: #a67c28;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#currentStyle {
+  font-size: 14px;
+  color: #666;
+}
+
+:root {
+  /* Font families */
+  --font-primary: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  --font-display: 'Clash Display', 'DM Sans', sans-serif;
+
+  /* Font families for each card design */
+  --font-classic: 'Georgia', serif;
+  --font-elegant: 'Playfair Display', serif;
+  --font-journal: 'Crimson Text', serif;
+  --font-modern: 'Montserrat', sans-serif;
+  --font-vintage: 'Times New Roman', serif;
+  --font-futuristic: 'Orbitron', sans-serif;
+
+  /* Color palette */
+  --color-primary: #FF6B35;
+  --color-primary-light: #FF8F66;
+  --color-primary-dark: #E55A2B;
+  --color-secondary: #2EC4B6;
+  --color-text: #1F2937;
+  --color-text-light: #6B7280;
+  --color-text-lighter: #9CA3AF;
+  --color-background: #FFFFFF;
+  --color-background-light: #F9FAFB;
+  --color-border: #E5E7EB;
+  --color-accent: #FF6B35;
+
+  /* Futuristic Glow Colors */
+  --color-glow-base: #0ff;
+  --color-glow-accent: #8a2be2;
+  --color-glow-bg: rgba(255, 255, 255, 0.05);
+  --color-glow-border: rgba(0, 255, 255, 0.3);
+  --color-glow-text: #e0f7fa;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-elevated: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* Transitions */
+  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Remove orange dots from all ingredient lists */
+.ingredients-preview li::before {
+  display: none !important;
+}
+
+/* Font and button overrides for each card design */
+.cards-container.classic-style .recipe-title,
+.cards-container.classic-style .card-content,
+.cards-container.classic-style .ingredients-preview,
+.cards-container.classic-style .stat-item {
+  font-family: var(--font-classic);
+}
+.cards-container.classic-style .btn-primary,
+.cards-container.classic-style .btn-secondary {
+  font-family: var(--font-classic);
+  border-radius: 8px;
+  background: #2d3748;
+  color: #fff;
+}
+.cards-container.classic-style .btn-primary:hover,
+.cards-container.classic-style .btn-secondary:hover {
+  background: #222;
+  color: #fff;
+}
+
+.cards-container.elegant-style .recipe-title,
+.cards-container.elegant-style .card-content,
+.cards-container.elegant-style .ingredients-preview,
+.cards-container.elegant-style .stat-item {
+  font-family: var(--font-elegant);
+}
+.cards-container.elegant-style .btn-primary,
+.cards-container.elegant-style .btn-secondary {
+  font-family: var(--font-elegant);
+  border-radius: 0;
+  background: #222;
+  color: #fff;
+  border: 2px solid #222;
+}
+.cards-container.elegant-style .btn-primary:hover,
+.cards-container.elegant-style .btn-secondary:hover {
+  background: #fff;
+  color: #222;
+}
+
+.cards-container.recipe-journal .recipe-title,
+.cards-container.recipe-journal .card-content,
+.cards-container.recipe-journal .ingredients-preview,
+.cards-container.recipe-journal .stat-item {
+  font-family: var(--font-journal);
+}
+.cards-container.recipe-journal .btn-primary,
+.cards-container.recipe-journal .btn-secondary {
+  font-family: var(--font-journal);
+  font-style: italic;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: #8B4513;
+  border: 2px solid #8B4513;
+}
+.cards-container.recipe-journal .btn-primary:hover,
+.cards-container.recipe-journal .btn-secondary:hover {
+  background: #8B4513;
+  color: #fff9f0;
+}
+
+.cards-container.vintage-pastel .recipe-title,
+.cards-container.vintage-pastel .card-content,
+.cards-container.vintage-pastel .ingredients-preview,
+.cards-container.vintage-pastel .stat-item {
+  font-family: var(--font-vintage);
+}
+.cards-container.vintage-pastel .btn-primary,
+.cards-container.vintage-pastel .btn-secondary {
+  font-family: var(--font-vintage);
+  border-radius: 0.75rem;
+  background: #8B5E3C;
+  color: #fff;
+}
+.cards-container.vintage-pastel .btn-secondary:hover {
+  background-color: #F2E2CD;
+  color: #8B5E3C;
+}
+
+/* 
+    =======================================================
+    Base card layout (keeps cards in the center).
+    =======================================================
+  */
+/* Card Design 1: Classic */
+.cards-container.classic-style .recipe-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.09);
+  border: 1px solid #e5e7eb;
+  font-family: 'Georgia', serif;
+  color: #222;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cards-container.classic-style .card-image {
+  border-radius: 18px 18px 0 0;
+  overflow: hidden;
+}
+
+.cards-container.classic-style .recipe-title {
+  font-size: 1.5rem;
+  color: #2d3748;
+  font-family: 'Georgia', serif;
+  margin-bottom: 0.75rem;
+}
+
+.cards-container.classic-style .card-content {
+  padding: 1.5rem 1.5rem 1.2rem 1.5rem;
+}
+
+/* Card Design 3: Elegant Border */
+.cards-container.elegant-style .recipe-card {
+  background: #fff;
+  border-radius: 0;
+  border: 3px double #222;
+  box-shadow: 0 8px 32px #2222, 0 2px 0 #222 inset;
+  font-family: 'Playfair Display', serif;
+  color: #222;
+  position: relative;
+  overflow: visible;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.cards-container.elegant-style .card-image {
+  border-radius: 0;
+  overflow: hidden;
+  border-bottom: 3px double #222;
+}
+.cards-container.elegant-style .card-image img {
+  filter: grayscale(0.15) contrast(1.08);
+}
+.cards-container.elegant-style .cuisine-badge {
+  background: #fff;
+  color: #222;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  border: 1.5px solid #222;
+  border-radius: 0 0 12px 12px;
+  left: 0;
+  right: auto;
+  top: 0;
+  padding: 0.3rem 1.2rem;
+  box-shadow: 0 2px 8px #2222;
+}
+.cards-container.elegant-style .recipe-title {
+  font-size: 2rem;
+  font-family: 'Playfair Display', serif;
+  color: #222;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 1px 0 #fff, 0 0 8px #2222;
+  letter-spacing: 1px;
+}
+.cards-container.elegant-style .card-content {
+  padding: 2rem 2rem 1.5rem 2rem;
+}
+.cards-container.elegant-style .btn-primary {
+  background: #222;
+  color: #fff;
+  border-radius: 0;
+  font-family: 'Playfair Display', serif;
+  border: 2px solid #222;
+  font-size: 1rem;
+}
+.cards-container.elegant-style .btn-primary:hover {
+  background: #fff;
+  color: #222;
+}
+
+/* Card Design: Recipe-Journal */
+/* Card Design: Recipe‑Journal */
+.cards-container.recipe-journal .recipe-card {
+background: #fff9f0;
+border-radius: 0;
+border: none;
+box-shadow: 2px 2px 15px rgba(0,0,0,0.1);
+font-family: 'Crimson Text', serif;
+position: relative;
+/* image height (200px) + border (10px) + breathing room */
+padding: 20px;
+padding-top: 250px;
+}
+
+/* ——— Image half‑circle ——— */
+.cards-container.recipe-journal .card-image {
+position: absolute;
+top: 0; left: 0;
+width: 100%; height: 200px;
+overflow: hidden;
+border: 10px solid white;
+border-radius: 0 0 200px 200px;
+box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+background: #fff;
+z-index: 1;
+display: flex;
+align-items: flex-start;
+justify-content: center;
+}
+.cards-container.recipe-journal .card-image img {
+width: 100%; height: 300px;
+object-fit: cover;
+object-position: center top;
+border-radius: 0 0 200px 200px;
+}
+
+/* hide unwanted badge */
+.cards-container.recipe-journal .cuisine-badge {
+display: none;
+}
+
+/* ——— Content wrapper ——— */
+.cards-container.recipe-journal .card-content {
+position: relative;
+z-index: 2;
+padding: 0;
+}
+
+/* decorative divider */
+.cards-container.recipe-journal .card-content::before {
+content: '';
+position: absolute;
+top: 0; 
+left: 50%;
+transform: translateX(-50%);
+width: 80%;
+height: 1px;
+background: #8B4513;
+opacity: 0.3;
+z-index: 2;
+}
+
+/* ——— Title ——— */
+.cards-container.recipe-journal .recipe-title,
+.cards-container.recipe-journal .card-content h2 {
+text-align: center;
+color: #8B4513;
+font-style: italic;
+font-size: 1.5rem;
+margin: 0 0 10px;
+}
+
+/* ——— Stats row (Cal • Min • Serves) ——— */
+.cards-container.recipe-journal .recipe-stats {
+display: flex;
+justify-content: center;
+border-bottom: 1px solid rgba(139, 69, 19, 0.2);
+padding-bottom: 10px;
+margin-bottom: 15px;
+}
+.cards-container.recipe-journal .recipe-stats .stat-item {
+color: #8B4513;
+font-style: italic;
+position: relative;
+padding: 0 8px;
+}
+/* add a “|” after every item except the last */
+.cards-container.recipe-journal .recipe-stats .stat-item:not(:last-child)::after {
+content: "|";
+position: absolute;
+right: 0;
+top: 50%;
+transform: translateY(-50%);
+color: #8B4513;
+}
+.cards-container.recipe-journal .recipe-stats .stat-item svg {
+vertical-align: middle;
+}
+
+/* ——— Ingredients preview ——— */
+.cards-container.recipe-journal .ingredients-preview {
+list-style: none;           /* remove bullets */
+margin: 15px 0;             /* your spacing */
+padding: 0;                 /* remove default ul padding */
+}
+.cards-container.recipe-journal .ingredients-preview h3 {
+text-align: center;
+color: #8B4513;
+font-style: italic;
+font-size: 1.2rem;
+margin-bottom: 8px;
+}
+.cards-container.recipe-journal .ingredients-preview li {
+list-style: none;           /* just in case */
+margin: 4px 0;              /* space between items */
+color: #8B4513;
+font-size: 1rem;
+text-align: center;
+padding: 0;
+}
+.cards-container.recipe-journal .ingredients-preview li::before {
+display: none;
+}
+
+/* ——— Buttons ——— */
+.cards-container.recipe-journal .btn-primary,
+.cards-container.recipe-journal .btn-secondary {
+display: inline-block;
+text-decoration: none;
+text-align: center;
+font-family: 'Crimson Text', serif;
+font-style: italic;
+padding: 6px 14px;
+transition: all 0.3s ease;
+margin-top: 10px;
+}
+
+.cards-container.recipe-journal .btn-primary {
+background: transparent;
+border: 2px solid #8B4513;
+color: #8B4513;
+margin-right: 10px;
+}
+.cards-container.recipe-journal .btn-primary:hover {
+background: #8B4513;
+color: #fff9f0;
+}
+
+.cards-container.recipe-journal .btn-secondary {
+background: transparent;
+border: 1px solid #8B4513;
+color: #8B4513;
+}
+
+
+/* Card Design 7: Vintage‑Pastel */
+.cards-container.vintage-pastel .recipe-card {
+background: #FFFAF5;
+border: 1px solid #F2EDE4;
+border-radius: 1.5rem;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+font-family: 'Crimson Text', serif;
+display: flex;
+flex-direction: column;
+overflow: hidden;
+}
+
+.cards-container.vintage-pastel .card-image {
+width: 100%;
+padding-top: 100%;
+position: relative;
+}
+
+.cards-container.vintage-pastel .card-image img {
+position: absolute;
+top: 0; left: 0;
+width: 100%; height: 100%;
+object-fit: cover;
+border-radius: 50%;
+border: 8px solid #FEF0E3;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+transform: translateY(-25%);
+background: #fff;
+}
+
+.cards-container.vintage-pastel .card-content {
+padding: 3rem 1.5rem 1.5rem; /* extra top padding to accommodate circular image */
+text-align: center;
+flex-grow: 1;
+}
+
+.cards-container.vintage-pastel .recipe-title {
+font-size: 1.5rem;
+color: #8B5E3C;
+margin: 0 0 0.5rem;
+}
+
+.cards-container.vintage-pastel .recipe-stats {
+display: flex;
+justify-content: center;
+gap: 1rem;
+font-size: 0.875rem;
+color: #A47C48;
+margin-bottom: 1rem;
+}
+
+.cards-container.vintage-pastel .btn-secondary {
+color: #A47C48;
+border: 2px solid #F2E2CD;
+background: transparent;
+font-size: 0.9rem;
+padding: 0.6rem 1.2rem;
+border-radius: 0.75rem;
+margin-top: auto;
+transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.cards-container.vintage-pastel .btn-secondary:hover {
+background-color: #F2E2CD;
+color: #8B5E3C;
+}
+
+/* Card Design: Retro Cardboard */
+.cards-container.retro-cardboard .recipe-card {
+background: #e8e0d2; /* Cardboard base color */
+border-radius: 0;
+border: none;
+box-shadow: 2px 2px 0 #333, 4px 4px 0 #555;
+font-family: 'Courier New', monospace;
+position: relative;
+overflow: visible;
+padding: 0;
+display: flex;
+flex-direction: column;
+transform: rotate(-1deg);
+}
+
+/* Add cardboard texture overlay */
+.cards-container.retro-cardboard .recipe-card::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23aa9980' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+z-index: 0;
+pointer-events: none;
+}
+
+/* Image container with faded edges */
+.cards-container.retro-cardboard .card-image {
+position: relative;
+margin: 16px 16px 0;
+border-radius: 0;
+overflow: hidden;
+border: 4px solid #fff;
+box-shadow: 0 0 0 1px #333;
+z-index: 1;
+}
+
+/* Style the image */
+.cards-container.retro-cardboard .card-image img {
+filter: sepia(30%) contrast(1.1);
+transition: all 0.3s ease;
+}
+
+.cards-container.retro-cardboard .card-image:hover img {
+filter: sepia(0%) contrast(1.2);
+}
+
+/* Cuisine badge styled as a retro stamp */
+.cards-container.retro-cardboard .cuisine-badge {
+background: #cc5544;
+color: #fff;
+font-family: 'Impact', 'Arial Black', sans-serif;
+text-transform: uppercase;
+padding: 5px 12px;
+font-size: 0.8rem;
+border-radius: 0;
+transform: rotate(5deg);
+position: absolute;
+top: 16px;
+right: 16px;
+box-shadow: 1px 1px 0 #333;
+letter-spacing: 1px;
+z-index: 2;
+}
+
+/* Recipe title with retro typography */
+.cards-container.retro-cardboard .recipe-title {
+font-family: 'Impact', 'Arial Black', sans-serif;
+font-size: 1.6rem;
+color: #333;
+text-transform: uppercase;
+letter-spacing: 1px;
+text-align: center;
+margin-bottom: 12px;
+padding: 0 16px;
+position: relative;
+z-index: 2;
+text-shadow: 1px 1px 0 #fff;
+border-bottom: 2px dashed #aa9980;
+}
+
+/* Content area */
+.cards-container.retro-cardboard .card-content {
+padding: 12px;
+position: relative;
+z-index: 2;
+}
+
+/* Recipe stats with retro icons */
+.cards-container.retro-cardboard .recipe-stats {
+display: flex;
+justify-content: center;
+gap: 12px;
+margin-bottom: 12px;
+font-family: 'Courier New', monospace;
+}
+
+.cards-container.retro-cardboard .stat-item {
+color: #333;
+display: flex;
+align-items: center;
+gap: 4px;
+font-size: 0.9rem;
+background: #fff;
+padding: 2px 8px;
+border: 1px solid #aa9980;
+}
+
+.cards-container.retro-cardboard .stat-item svg {
+color: #cc5544;
+}
+
+/* Ingredients list */
+.cards-container.retro-cardboard .ingredients-preview {
+background: #fff;
+border: 1px solid #aa9980;
+padding: 12px;
+margin: 0 12px 12px;
+list-style-type: none;
+font-family: 'Courier New', monospace;
+position: relative;
+}
+
+.cards-container.retro-cardboard .ingredients-preview::before {
+content: "INGREDIENTS";
+position: absolute;
+top: -10px;
+left: 50%;
+transform: translateX(-50%);
+background: #e8e0d2;
+padding: 0 8px;
+font-family: 'Impact', 'Arial Black', sans-serif;
+font-size: 0.8rem;
+color: #333;
+}
+
+.cards-container.retro-cardboard .ingredients-preview h3 {
+display: none;
+}
+
+.cards-container.retro-cardboard .ingredients-preview li {
+position: relative;
+padding-left: 16px;
+margin-bottom: 4px;
+font-size: 0.9rem;
+color: #333;
+}
+
+.cards-container.retro-cardboard .ingredients-preview li::before {
+content: "•";
+position: absolute;
+left: 0;
+display: inline-block !important;
+color: #cc5544;
+font-weight: bold;
+}
+
+/* Button styles */
+.cards-container.retro-cardboard .btn-primary,
+.cards-container.retro-cardboard .btn-secondary {
+font-family: 'Impact', 'Arial Black', sans-serif;
+text-transform: uppercase;
+letter-spacing: 1px;
+font-size: 0.9rem;
+padding: 8px 16px;
+border-radius: 0;
+transition: all 0.2s ease;
+position: relative;
+text-align: center;
+display: inline-block;
+margin: 0 6px 12px;
+}
+
+.cards-container.retro-cardboard .btn-primary {
+background: #cc5544;
+color: #fff;
+border: 2px solid #cc5544;
+box-shadow: 2px 2px 0 #333;
+}
+
+.cards-container.retro-cardboard .btn-primary:hover {
+background: #aa3322;
+transform: translate(1px, 1px);
+box-shadow: 1px 1px 0 #333;
+}
+
+.cards-container.retro-cardboard .btn-secondary {
+background: #fff;
+color: #333;
+border: 2px solid #333;
+box-shadow: 2px 2px 0 #aa9980;
+}
+
+.cards-container.retro-cardboard .btn-secondary:hover {
+background: #f5f5f5;
+transform: translate(1px, 1px);
+box-shadow: 1px 1px 0 #aa9980;
+}
+
+/* Optional: Faded corners effect */
+.cards-container.retro-cardboard .recipe-card::after {
+content: '';
+position: absolute;
+width: 40px;
+height: 40px;
+background: #333;
+bottom: -4px;
+right: -4px;
+border-radius: 0 0 6px 0;
+z-index: -1;
+opacity: 0.1;
+}
+
+/* Add font declarations for the retro style */
+.cards-container.retro-cardboard .recipe-title,
+.cards-container.retro-cardboard .cuisine-badge,
+.cards-container.retro-cardboard .btn-primary,
+.cards-container.retro-cardboard .btn-secondary,
+.cards-container.retro-cardboard .ingredients-preview::before {
+font-family: var(--font-vintage), 'Impact', 'Arial Black', sans-serif;
+}
+
+.cards-container.retro-cardboard .card-content,
+.cards-container.retro-cardboard .ingredients-preview,
+.cards-container.retro-cardboard .stat-item {
+font-family: var(--font-vintage), 'Courier New', monospace;
+}
+
+/* Geometric Luxury Card Design */
+:root {
+/* Font families */
+--font-geometric-heading: 'Cormorant Garamond', 'Didot', serif;
+--font-geometric-body: 'Outfit', 'Helvetica Neue', sans-serif;
+
+/* Color palette */  
+--geo-background: #f8f9fa;
+--geo-card: #ffffff;
+--geo-primary: #3a506b;
+--geo-secondary: #5bc0be;
+--geo-accent: #0b132b;
+--geo-text: #1c2541;
+--geo-text-light: #6c757d;
+--geo-border: #dee2e6;
+--geo-gold: #d4af37;
+}
+
+/* Geometric Luxury Card */
+.cards-container.geometric-luxury .recipe-card {
+background: var(--geo-card);
+border-radius: 16px;
+overflow: visible;
+position: relative;
+box-shadow: 0 10px 30px rgba(27, 37, 65, 0.08);
+font-family: var(--font-geometric-body);
+color: var(--geo-text);
+padding: 0;
+transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), 
+          box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Hover effect */
+.cards-container.geometric-luxury .recipe-card:hover {
+transform: translateY(-8px);
+box-shadow: 0 16px 40px rgba(27, 37, 65, 0.12);
+}
+
+/* Unique hexagonal image frame */
+.cards-container.geometric-luxury .card-image {
+position: relative;
+overflow: hidden;
+height: 240px;
+clip-path: polygon(
+0% 0%,
+100% 0%,
+100% 85%,
+50% 100%,
+0% 85%
+);
+border-radius: 16px 16px 0 0;
+}
+
+/* Image effect */
+.cards-container.geometric-luxury .card-image img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+filter: contrast(1.05) saturate(1.1);
+}
+
+/* Image zoom on hover */
+.cards-container.geometric-luxury .recipe-card:hover .card-image img {
+transform: scale(1.05);
+}
+
+/* Overlay for image */
+.cards-container.geometric-luxury .card-image::after {
+content: "";
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: linear-gradient(
+to top,
+rgba(27, 37, 65, 0.4) 0%,
+rgba(27, 37, 65, 0) 40%
+);
+z-index: 1;
+}
+
+/* Cuisine badge */
+.cards-container.geometric-luxury .cuisine-badge {
+position: absolute;
+top: 16px;
+right: 16px;
+background: rgba(255, 255, 255, 0.85);
+color: var(--geo-accent);
+font-family: var(--font-geometric-body);
+font-weight: 600;
+font-size: 0.75rem;
+letter-spacing: 0.05em;
+text-transform: uppercase;
+padding: 6px 12px;
+border-radius: 4px;
+backdrop-filter: blur(4px);
+z-index: 2;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+transition: all 0.3s ease;
+}
+
+.cards-container.geometric-luxury .recipe-card:hover .cuisine-badge {
+background: var(--geo-accent);
+color: white;
+}
+
+/* Card content */
+.cards-container.geometric-luxury .card-content {
+padding: 1.75rem;
+position: relative;
+}
+
+/* Gold accent line */
+.cards-container.geometric-luxury .card-content::before {
+content: "";
+position: absolute;
+top: 0;
+left: 50%;
+transform: translateX(-50%);
+width: 40px;
+height: 3px;
+background: var(--geo-gold);
+border-radius: 3px;
+}
+
+/* Recipe title */
+.cards-container.geometric-luxury .recipe-title {
+font-family: var(--font-geometric-heading);
+color: var(--geo-accent);
+font-size: 1.75rem;
+font-weight: 600;
+line-height: 1.2;
+margin-bottom: 0.8rem;
+letter-spacing: -0.01em;
+position: relative;
+transition: color 0.3s ease;
+}
+
+/* Title hover effect */
+.cards-container.geometric-luxury .recipe-card:hover .recipe-title {
+color: var(--geo-primary);
+}
+
+/* Stats styling */
+.cards-container.geometric-luxury .recipe-stats {
+display: flex;
+justify-content: flex-start;
+gap: 1.5rem;
+margin: 1.25rem 0;
+padding-bottom: 1.25rem;
+border-bottom: 1px solid var(--geo-border);
+}
+
+.cards-container.geometric-luxury .stat-item {
+display: flex;
+align-items: center;
+font-family: var(--font-geometric-body);
+font-size: 0.9rem;
+color: var(--geo-text-light);
+}
+
+.cards-container.geometric-luxury .stat-item svg {
+color: var(--geo-secondary);
+margin-right: 0.5rem;
+transition: transform 0.3s ease;
+}
+
+.cards-container.geometric-luxury .recipe-card:hover .stat-item svg {
+transform: scale(1.15);
+}
+
+/* Ingredients styling */
+.cards-container.geometric-luxury .ingredients-preview {
+list-style: none;
+margin: 1.25rem 0;
+padding: 0;
+}
+
+.cards-container.geometric-luxury .ingredients-preview h3 {
+font-family: var(--font-geometric-heading);
+color: var(--geo-primary);
+font-size: 1.1rem;
+font-weight: 600;
+margin-bottom: 0.8rem;
+letter-spacing: 0.02em;
+}
+
+.cards-container.geometric-luxury .ingredients-preview li {
+position: relative;
+padding-left: 1.5rem;
+margin-bottom: 0.5rem;
+color: var(--geo-text);
+font-size: 0.95rem;
+line-height: 1.5;
+transition: transform 0.3s ease;
+}
+
+/* Custom ingredient markers */
+.cards-container.geometric-luxury .ingredients-preview li::before {
+content: "";
+display: block !important;
+position: absolute;
+left: 0;
+top: 0.5rem;
+width: 6px;
+height: 6px;
+background: var(--geo-secondary);
+border-radius: 0;
+transform: rotate(45deg);
+transition: all 0.3s ease;
+}
+
+/* Ingredient hover effect */
+.cards-container.geometric-luxury .recipe-card:hover .ingredients-preview li::before {
+background: var(--geo-gold);
+}
+
+/* Button container */
+.cards-container.geometric-luxury .card-actions {
+display: flex;
+justify-content: space-between;
+margin-top: 1.5rem;
+}
+
+/* Primary button */
+.cards-container.geometric-luxury .btn-primary {
+font-family: var(--font-geometric-body);
+font-weight: 500;
+font-size: 0.95rem;
+letter-spacing: 0.03em;
+padding: 0.75rem 1.5rem;
+border-radius: 6px;
+background: var(--geo-primary);
+color: white;
+border: none;
+position: relative;
+overflow: hidden;
+z-index: 1;
+transition: all 0.3s ease;
+}
+
+/* Button hover effect */
+.cards-container.geometric-luxury .btn-primary::after {
+content: "";
+position: absolute;
+bottom: 0;
+left: 0;
+width: 100%;
+height: 0;
+background: var(--geo-accent);
+z-index: -1;
+transition: height 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.cards-container.geometric-luxury .btn-primary:hover {
+transform: translateY(-2px);
+box-shadow: 0 6px 15px rgba(27, 37, 65, 0.2);
+}
+
+.cards-container.geometric-luxury .btn-primary:hover::after {
+height: 100%;
+}
+
+/* Secondary button */
+.cards-container.geometric-luxury .btn-secondary {
+font-family: var(--font-geometric-body);
+font-weight: 500;
+font-size: 0.95rem;
+letter-spacing: 0.03em;
+padding: 0.75rem 1.5rem;
+border-radius: 6px;
+background: transparent;
+color: var(--geo-primary);
+border: 1px solid var(--geo-border);
+transition: all 0.3s ease;
+}
+
+.cards-container.geometric-luxury .btn-secondary:hover {
+background: rgba(58, 80, 107, 0.05);
+border-color: var(--geo-primary);
+transform: translateY(-2px);
+}
+
+/* Add diamond accents to corners */
+.cards-container.geometric-luxury .recipe-card::before,
+.cards-container.geometric-luxury .recipe-card::after {
+content: "";
+position: absolute;
+width: 10px;
+height: 10px;
+background: var(--geo-gold);
+opacity: 0;
+transform: rotate(45deg);
+transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.cards-container.geometric-luxury .recipe-card::before {
+top: -5px;
+left: -5px;
+}
+
+.cards-container.geometric-luxury .recipe-card::after {
+bottom: -5px;
+right: -5px;
+}
+
+.cards-container.geometric-luxury .recipe-card:hover::before,
+.cards-container.geometric-luxury .recipe-card:hover::after {
+opacity: 1;
+}
+
+/* Recipe description styling */
+.cards-container.geometric-luxury .recipe-description {
+color: var(--geo-text-light);
+font-size: 0.95rem;
+line-height: 1.6;
+margin-top: 0.75rem;
+}
+
+/* Button special effects */
+.cards-container.geometric-luxury .btn-primary:active {
+transform: translateY(1px);
+box-shadow: 0 2px 5px rgba(27, 37, 65, 0.2);
+}
+
+.cards-container.geometric-luxury .btn-secondary:active {
+transform: translateY(1px);
+}
+
+/* Additional animations for smoother experience */
+@keyframes shimmer {
+0% {
+background-position: -200% 0;
+}
+100% {
+background-position: 200% 0;
+}
+}
+
+/* Add shimmer effect to gold accents on hover */
+.cards-container.geometric-luxury .card-content::before {
+background: linear-gradient(
+90deg, 
+var(--geo-gold) 0%, 
+#f0e68c 25%, 
+var(--geo-gold) 50%, 
+#f0e68c 75%, 
+var(--geo-gold) 100%
+);
+background-size: 200% 100%;
+transition: all 0.4s ease;
+}
+
+.cards-container.geometric-luxury .recipe-card:hover .card-content::before {
+animation: shimmer 2s infinite linear;
+}
+
+/* Subtle card scaling */
+.cards-container.geometric-luxury .recipe-card {
+transform-origin: center bottom;
+}
+
+/* Focus styles for accessibility */
+.cards-container.geometric-luxury .btn-primary:focus,
+.cards-container.geometric-luxury .btn-secondary:focus {
+outline: none;
+box-shadow: 0 0 0 3px rgba(58, 80, 107, 0.3);
+}
+
+/* Enhanced smooth transitions */
+.cards-container {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.cards-container .recipe-card {
+  transition: 
+    transform 0.85s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.85s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 0.5s ease;
+  will-change: transform, opacity;
+  transform-origin: center center;
+}
+
+/* Improved staggered animations */
+@keyframes smoothEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.94) translateY(40px) rotateX(6deg);
+    filter: blur(10px);
+  }
+  30% {
+    opacity: 0.8;
+    filter: blur(4px);
+  }
+  60% {
+    transform: scale(1.02) translateY(-5px) rotateX(-2deg);
+    filter: blur(0);
+  }
+  80% {
+    transform: scale(0.98) translateY(2px) rotateX(1deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotateX(0);
+  }
+}
+
+/* Smoother style switching */
+@keyframes smoothStyleChange {
+  0% {
+    transform: scale(1) translateZ(0) rotateX(0);
+  }
+  25% {
+    transform: scale(0.96) translateZ(-50px) rotateX(4deg);
+    filter: blur(4px);
+  }
+  75% {
+    transform: scale(1.02) translateZ(20px) rotateX(-2deg);
+    filter: blur(0);
+  }
+  100% {
+    transform: scale(1) translateZ(0) rotateX(0);
+  }
+}
+
+/* Updated stagger delays */
+.cards-container.animated .recipe-card:nth-child(1) { animation-delay: 0.08s; }
+.cards-container.animated .recipe-card:nth-child(2) { animation-delay: 0.16s; }
+.cards-container.animated .recipe-card:nth-child(3) { animation-delay: 0.24s; }
+.cards-container.animated .recipe-card:nth-child(4) { animation-delay: 0.32s; }
+.cards-container.animated .recipe-card:nth-child(n+5) { animation-delay: 0.4s; }
+
+/* Smooth style switching animation */
+.cards-container.style-transition .recipe-card {
+  animation: none;
+  transition: 
+    transform 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+    background-color 0.6s ease,
+    border 0.6s ease,
+    box-shadow 0.6s ease,
+    color 0.6s ease;
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-primary);
+  background-color: var(--color-background-light);
+  color: var(--color-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Main container */
+.main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Cards container */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+/* Recipe card */
+.recipe-card {
+  background-color: var(--color-background);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-normal);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.recipe-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-elevated);
+}
+
+/* Card image */
+.card-image {
+  position: relative;
+  padding-top: 65%;
+  overflow: hidden;
+}
+
+.card-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition-normal);
+}
+
+.recipe-card:hover .card-image img {
+  transform: scale(1.05);
+}
+
+/* Cuisine badge */
+.cuisine-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background-color: rgba(255, 107, 53, 0.9);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Card content */
+.card-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Recipe title */
+.recipe-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+/* Recipe stats */
+.recipe-stats {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+}
+
+.stat-item svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-accent);
+}
+
+/* Ingredients preview */
+.ingredients-preview {
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.ingredients-preview h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--color-text);
+}
+
+.ingredients-preview ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ingredients-preview li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+  line-height: 1.4;
+}
+
+.more-ingredients {
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+/* Card actions */
+.card-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.btn-primary,
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: var(--transition-fast);
+  text-decoration: none;
+  flex: 1;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-secondary svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 3rem 0;
+}
+
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-weight: 500;
+  transition: var(--transition-fast);
+  cursor: pointer;
+}
+
+.pagination-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.pagination-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.page-indicator {
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+}
+
+/* Empty state & Welcome */
+.empty-state,
+.welcome {
+  text-align: center;
+  padding: 4rem 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.empty-state svg,
+.welcome-icon svg {
+  color: var(--color-text-lighter);
+  margin-bottom: 1rem;
+}
+
+.empty-state h2,
+.welcome h1 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.empty-state p,
+.welcome p {
+  color: var(--color-text-light);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+  }
+
+  .card-actions {
+    flex-direction: column;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+}
+
+/* 
+    ======================================================================
+    Preloader (unchanged) 
+    ======================================================================
+  */
+.preloader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f8f9fa;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease-out;
+}
+
+.preloader-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.dots-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 50px;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  margin: 0 8px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #6366f1, #4f46e5);
+  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+  animation: jumpingDot 1.2s infinite;
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.dot:nth-child(4) {
+  animation-delay: 0.6s;
+}
+
+.dot:nth-child(5) {
+  animation-delay: 0.8s;
+}
+
+@keyframes jumpingDot {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-25px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.preloader-progress {
+  position: relative;
+  width: 200px;
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.preloader-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #4f46e5, #6366f1);
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+
+.loading-text {
+  margin-top: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #6366f1;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+#content {
+  display: none;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+

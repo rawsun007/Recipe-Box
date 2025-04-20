@@ -1,0 +1,93 @@
+{% if queryset %}
+  <div class="cards-container" data-design-index="{{ request.session.selectedCardDesignIndex|default:'' }}">
+    {% for recipe in queryset %}
+      <div class="recipe-card">
+        <div class="card-image">
+          <img src="{{ recipe.recipe_image }}" alt="Recipe Image">
+          {% if recipe.cuisine_type %}
+            <span class="cuisine-badge">{{ recipe.cuisine_type }}</span>
+          {% endif %}
+        </div>
+        <div class="card-content">
+          <h2 class="recipe-title" style="text-align:center;">{{ recipe.recipe_label }}</h2>
+          <div class="recipe-stats" style="flex-direction: column; align-items: flex-start;">
+            {% if recipe.meal_type %}
+              <span class="stat-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 3.293l6 6V15a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V9.293l6-6zm0-1.414L1 8.879V15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8.879L8 1.879z"/></svg>
+                {{ recipe.meal_type }}
+              </span>
+            {% endif %}
+            {% if recipe.dish_type %}
+              <span class="stat-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M2 2h12v12H2z" fill="none"/><path d="M2 2h12v12H2z"/></svg>
+                {{ recipe.dish_type }}
+              </span>
+            {% endif %}
+            {% if recipe.source %}
+              <span class="stat-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M6 2a1 1 0 0 0-1 1v1H3.5A1.5 1.5 0 0 0 2 5.5v7A1.5 1.5 0 0 0 3.5 14h9A1.5 1.5 0 0 0 14 12.5v-7A1.5 1.5 0 0 0 12.5 4H11V3a1 1 0 0 0-1-1H6zm0 1h4v1H6V3z"/></svg>
+                {{ recipe.source }}
+              </span>
+            {% endif %}
+          </div>
+          <div class="card-actions">
+            <a href="{% url 'delete_recipe' id=recipe.id source='saved' %}" class="btn-primary btn delete-btn btn-danger">Delete</a>
+            <a href="{{ recipe.recipe_url }}" class="btn-secondary btn btn-success" target="_blank">View Recipe</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <!-- Pagination -->
+  {% if queryset.has_other_pages %}
+    <div class="pagination-container">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          {% if queryset.has_previous %}
+            <li class="page-item">
+              <a class="page-link pagination-ajax-link" href="?page=1">&laquo; First</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link pagination-ajax-link" href="?page={{ queryset.previous_page_number }}">Previous</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">&laquo; First</span>
+            </li>
+            <li class="page-item disabled">
+              <span class="page-link">Previous</span>
+            </li>
+          {% endif %}
+          <li class="page-item">
+            <span class="current page-link">Page {{ queryset.number }} of {{ queryset.paginator.num_pages }}</span>
+          </li>
+          {% if queryset.has_next %}
+            <li class="page-item">
+              <a class="page-link pagination-ajax-link" href="?page={{ queryset.next_page_number }}">Next</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link pagination-ajax-link" href="?page={{ queryset.paginator.num_pages }}">Last &raquo;</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">Next</span>
+            </li>
+            <li class="page-item disabled">
+              <span class="page-link">Last &raquo;</span>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  {% endif %}
+{% else %}
+  {% if search_performed %}
+    <div class="no-results-message">
+      <p>No saved recipes found.</p>
+    </div>
+  {% else %}
+    <div class="welcome-message">
+      <p>You haven't saved any recipes yet. Find some inspiration here!</p>
+    </div>
+  {% endif %}
+{% endif %}

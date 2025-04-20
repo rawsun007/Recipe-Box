@@ -1,0 +1,117 @@
+<div class="main">
+  <!-- New Card Container -->
+  <div class="cards-container geometric-luxury">
+    {% for recipe in recipes %}
+    <div class="recipe-card">
+      <div class="card-image">
+        <img src="{{ recipe.img }}" alt="Recipe Image" />
+        {% if recipe.cuisine %}
+        <span class="cuisine-badge">{{ recipe.cuisine }}</span>
+        {% endif %}
+      </div>
+      <div class="card-content">
+        <h2 class="recipe-title">{{ recipe.name }}</h2>
+        <div class="recipe-description">
+          {{ recipe.about }}
+        </div>
+        <div class="card-actions">
+          {% if recipe.created_by == user %}
+          <a
+            href="{% url 'delete_recipe' id=recipe.id source='CommunityRecipe' %}"
+            class="btn-primary"
+            >Delete</a
+          >
+          <a
+            href="{% url 'update_recipe' id=recipe.id %}"
+            class="btn-secondary"
+            >Update</a
+          >
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% if not recipes %}
+<!-- No Recipes Found Message -->
+<div
+  style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    text-align: center;
+  "
+>
+  <p
+    style="
+      font-size: 1.5em;
+      color: #666;
+      background-color: #f9f9f9;
+      padding: 20px 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    "
+  >
+    There are no recipes available in the community.
+  </p>
+</div>
+{% endif %}
+
+{% if recipes.has_other_pages %}
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    {% if recipes.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page=1">&laquo; First</a>
+    </li>
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="?page={{ recipes.previous_page_number }}"
+        >Previous</a
+      >
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <span class="page-link">&laquo; First</span>
+    </li>
+    <li class="page-item disabled">
+      <span class="page-link">Previous</span>
+    </li>
+    {% endif %}
+
+    <li class="page-item">
+      <span class="current page-link">
+        Page {{ recipes.number }} of {{ recipes.paginator.num_pages }}
+      </span>
+    </li>
+
+    {% if recipes.has_next %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="?page={{ recipes.next_page_number }}"
+        >Next</a
+      >
+    </li>
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="?page={{ recipes.paginator.num_pages }}"
+        >Last &raquo;</a
+      >
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <span class="page-link">Next</span>
+    </li>
+    <li class="page-item disabled">
+      <span class="page-link">Last &raquo;</span>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
